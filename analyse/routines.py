@@ -2,9 +2,10 @@ import os
 
 
 def set_dataf(_file_name, is_csv):
-    '''
-    Getting and setting data directory for the data
-    If filename is null, prompt for name
+    '''Getting and setting data path
+
+    If the arguement _file_name is null, prompt for name
+    If the argument is_csv is True, use .csv file extension
 
     Returns
     -------
@@ -29,4 +30,12 @@ def set_dataf(_file_name, is_csv):
 
     return _file_path, _file_name
 
-    
+
+def read_ARAT(): #TODO
+    '''
+    read binary data
+    '''
+    readOk = False
+
+
+    pass
