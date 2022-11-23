@@ -10,6 +10,8 @@ from analyse.surrog import *
 
 
 def pltSSsur(arat_file='', is_csv = True):
+    # TODO
+    arat_file = 'P02_TS_2'
     # TODO change to args parser
     numR=20;        # how many reconstructed to view - 5
     numComp=3;      # how many components x/y/z
@@ -26,8 +28,7 @@ def pltSSsur(arat_file='', is_csv = True):
 
     # check if file exist in dir
     if not os.path.isfile(arat_file_path):
-        print(f"[INFO] {arat_file} file not found")
-        return -1
+        raise Exception(f'{arat_file} does not exist!')
     
     if is_csv:
         # read csv files and store data in numpy array
