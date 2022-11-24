@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.linalg import toeplitz
+from scipy.signal import lfilter
 from numpy.linalg import eig
 
 def ssa(x, M, method = 'unbiased'):
@@ -24,16 +25,17 @@ def ssa(x, M, method = 'unbiased'):
     '''
 
     E, V, C = ssaeig(x, M, method)
-    pc(x, E)
-    # A = pc(x, E)
-    # R = rc(A, E)
+    A = pc(x, E)
+    R = rc(A, E)
 
-    # return E, V, A, R, C
+    return E, V, A, R, C
+
+
 
 def ssaeig(x, M, method = "unbiased"):
-    ''' SSAEIG - starts an SSA of series 'x', for embedding dimension 'M'. 
+    ''' SSAEIG - starts an SSA of series 'x', for embedding dimension 'M'.
 
-    Syntax: [E,V,C]=ssaeig(x,M); [E,V,C]=ssaeig(x,M,'BK');   
+    Syntax: [E,V,C]=ssaeig(x,M); [E,V,C]=ssaeig(x,M,'BK');
      
     Input:    x - time series 
               M - embedding dimension. 
@@ -55,15 +57,14 @@ def ssaeig(x, M, method = "unbiased"):
     try:
         col = x.shape[1]
         if col != 1:
-            raise Exception("Vectors only!") # if not 1 x N array
+            raise ValueError("Vectors only!") # if not 1 x N array
     except IndexError:
         col = 1 # if x.shape[1] is -> 1 x N array
 
     if M >= N-M+1:
-        raise Exception("M, Too big a lag!")     
+        raise ValueError("M, Too big a lag!")     
 
     # =========================================================
-
     if method != 'BK':
         c = ac(x, M-1, method) # calculate autocovariance estimates
         C = toeplitz(c) # create Toeplitz matrix (trajectory matrix) 
@@ -79,14 +80,10 @@ def ssaeig(x, M, method = "unbiased"):
     # not needed in the Numpy case.
     L, E = eig(C)
     idx = L.argsort()[::-1]  # create sorted eigenvalue vector
-    V = L[idx]
+    V = -L[idx]
     E = E[:,idx] # sort eigenvector matrix 
     
     return E, V, C
-
-
-
-
 
 
 
@@ -107,13 +104,59 @@ def pc(x, E):
     try:
         col = x.shape[1]
         if col != 1:
-            raise Exception("Vectors only!") # if not 1 x N array
+            raise ValueError("Vectors only!") # if not 1 x N array
     except IndexError:
         col = 1 # if x.shape[1] is null -> 1 x N array
 
+    x = x - np.mean(x)
 
-def rc():
-    pass
+    M, c = E.shape
+    if M != c: raise ValueError("E is improperly dimensioned")
+
+    A = np.zeros((N-M+1,M))
+
+    for i in range(N-M+1):
+        w = x[i:i+M]
+        A[i,:] = np.dot(w.T, E)
+    
+    return A
+
+
+
+def rc(A, E):
+    '''Calculates the 'reconstructed components'
+
+    Syntax: [R]=rc(A,E);
+
+    This function calculates the 'reconstructed components' using the  
+    eigenvectors (E, from ssaeig.m) and principal components (A, from pc.m). 
+    R is N x M, where M is the embedding dimension used in ssaeig.m. 
+    '''
+    
+    M, c = E.shape
+    ra, ca = A.shape
+
+    if M != c: raise ValueError('E is improperly dimensioned.')
+    if ca != M: raise ValueError('A is improperly dimensioned.')
+    N = ra+M-1;  # Assumes A has N-M+1 rows.
+
+    R = np.zeros((N,M))
+    Z = np.zeros((M-1,M))
+    A = np.append(A.T,  Z.T, axis=1)
+    A = A.T
+    
+    # Calculate RCs
+    for k in range(M):
+        R[:,k] = lfilter(E[:,k], M, A[:,k])
+    
+    # Adjust first M-1 rows and last M-1 rows
+    for i in range(M-1):
+        R[i,:] *= (M/(i+1))
+        R[N-i-1,:]=R[N-i-1,:]*(M/(i+1));
+
+    return R
+
+
 
 def ac(x, k, method = "unbiased"):
     ''' Calculates the auto-covariance
@@ -137,13 +180,13 @@ def ac(x, k, method = "unbiased"):
     try:
         col = x.shape[1]
         if col != 1:
-            raise Exception("Vectors only!") # if not 1 x N array
+            raise ValueError("Vectors only!") # if not 1 x N array
     except IndexError:
         col = 1
 
 
     if k > N:
-        raise Exception("Too big a lag!")
+        raise ValueError("Too big a lag!")
 
     x = x - np.mean(x)
     c = np.zeros((k+1))
@@ -174,31 +217,10 @@ def ac(x, k, method = "unbiased"):
         pass
 
     else:
-        raise Exception('Improper specification of method.') 
+        raise ValueError('Improper specification of method.') 
             
-        
-    
 
-
-
-    pass
 
 def bk():
     pass
 
-##########################################################################################################
-
-if __name__ == '__main__':
-    plt_data = np.array([ -899.,  -899., -1670., -2184., -2441., -2441.,  1156.,  2955.,  -899., -1413.,
-                        -1156., -1156., -1156.,  -642.,  -642., -1156.,  -899.,  -128.,   385.,  -385.,
-                        -642.,  -642.,   128.,   385.,  2441.,  2955.,  2698.,  2184.,  2441.,  2698.,
-                        2441.,  2698.,  4754.,  4754.,  4240.,  4497., 5268.,  5011.,  5525.,  6296.,
-                        3983.,  3726.,  4754.,  4240.,  4240.,  5525.,  5011.,  5525.,  5782.,  6553.,
-                        7581.,  8609.,  9123.,  7581.,  7581.,  6810.,  5782.,  6039.,  5525.,  6810.,
-                        7067.,  5268.,  6296.,  6810.,  6553.,  8866.,  9637.,  8352., 10151., 10151.,
-                        10665., 11179.,  7324.,  7838.,  7324.,  3726.,  6039.,  6039.,  8352.,  8095.,
-                        8609., 10408.])
-
-    M = 17
-    plt_data = plt_data.transpose()
-    ssa(plt_data, M)

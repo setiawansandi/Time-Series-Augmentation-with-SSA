@@ -55,10 +55,10 @@ def pltSSsur(arat_file='', is_csv = True):
             #TODO function to plot
             pass
 
-        try:
-            E, V, A, R, C = ssa(plotdata, M)
-        except:
-            pass
+
+        E, V, A, R, C = ssa(plotdata, M)
+        
+            
 
     
     
