@@ -1,5 +1,6 @@
 import os
-
+from numpy import mean, power, argmin
+from math import log
 
 def set_dataf(_file_name, is_csv):
     '''Getting and setting data path
@@ -31,6 +32,7 @@ def set_dataf(_file_name, is_csv):
     return _file_path, _file_name
 
 
+
 def read_ARAT(): #TODO
     '''
     read binary data
@@ -39,3 +41,22 @@ def read_ARAT(): #TODO
 
 
     pass
+
+
+
+def get_min(V):
+    # estimate RDE per Braun given sorted eigenvalues in V
+    V0 = V - mean(V)
+    N = len(V)
+    nlgd = []
+
+    for d in range(N-1): # length of data
+        sig1 = sum(power(V0[0:d+1], 2)) / (d+1)
+        sig2 = sum(power(V0[d+1:], 2)) / (N-d-1)
+        res = log(sig1 ** 2) * (d+1) / N + log(sig2 ** 2) * (N-d-1) / N
+        nlgd.append(res)
+
+    return argmin(nlgd)
+    
+    
+

@@ -18,6 +18,7 @@ def pltSSsur(arat_file='', is_csv = True):
     numFreq=3;      # how many frequency domain values
     M = 17          # embedding dimension
     plot_ok = True if arat_file == '' else False
+    EVbp = []
 
     # ========================== Read file ===============================
 
@@ -47,18 +48,31 @@ def pltSSsur(arat_file='', is_csv = True):
     surrdata = np.zeros((numComp,data_len)); 
     
     # loop over the components of signal
-    for i in range(numComp):
+    for comp in range(numComp):
         # time and frequency plot for 3 components of acceleration
-        plotdata = _data[i,:];   # get one component of data
+        plotdata = _data[comp,:];   # get one component of data
 
         if plot_ok:
             #TODO function to plot
             pass
 
-
+        # Eigenfunctions, Variances,   principAl components, Reconstructed, Covariance
+        # Eigenvectors,   EigenValues, principAl components, Reconstructed, Covariance
         E, V, A, R, C = ssa(plotdata, M)
+
+        EVbp.append(get_min(V)) # eigenvalue breakpoint use Braun's RDE
         
-            
+        wavsig = np.zeros((R.shape[0]))
+        wavnoise = wavsig.copy()
+
+        # add all reconstructed waves up to breakpoint - gives signal
+        for r in range(EVbp[comp]+1):
+            wavsig = wavsig + R[:,r]
+
+        # after that is noise component
+        # for r in range ((EVbp(comp)+1), length(V)):
+        #     wavnoise = wavnoise+R(:,r)
+
 
     
     
