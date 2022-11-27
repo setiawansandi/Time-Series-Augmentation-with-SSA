@@ -70,10 +70,11 @@ def pltSSsur(arat_file='', is_csv = True):
             wavsig = wavsig + R[:,r]
 
         # after that is noise component
-        # for r in range ((EVbp(comp)+1), length(V)):
-        #     wavnoise = wavnoise+R(:,r)
+        for r in range ((EVbp[comp]+1), len(V)):
+             wavnoise = wavnoise+R[:,r]
 
-
+        
+        pass
     
     
 
