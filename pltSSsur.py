@@ -9,15 +9,29 @@ from analyse.ssa import *
 from analyse.surrog import *
 
 
-def pltSSsur(arat_file='', is_csv = True):
-    # TODO remove
-    arat_file = 'P02_TS_2'
+def pltSSsur(arat_file, is_csv = True, numComp = 3, plot_ok = False):
+    ''' perform SSA decomposition
 
+    Syntax: [surrdata] = pltSSsur(arat_file, is_csv, numComp)
+
+    perform SSA decomposition of signals from a file of ARAT data
+    and do reconstruction based on significant eigenvalues
+    leave "noise" to be randomized by surrogate
+
+    INPUT:   arat_file - file name of the sample data
+                is_csv - bool, True if the sample data file is csv
+               numComp - number of components
+               plot_ok - bool, whether to display graph
+
+    OUTPUT:   surrdata - surrogate data (matrix of 'numComp' columns)
+
+    TL 2022
+    '''
+    
     numR=20;        # how many reconstructed to view - 5
-    numComp=3;      # how many components x/y/z
+    numComp=numComp;      # how many components x/y/z
     numFreq=3;      # how many frequency domain values
     M = 17          # embedding dimension
-    plot_ok = True if arat_file == '' else False
     EVbp = []
 
     # ====================== Read file ===========================
@@ -39,7 +53,7 @@ def pltSSsur(arat_file='', is_csv = True):
 
     else: # if binary file
         # resAll = np.zeros((numComp, numR, numFreq, 1))
-        read_ARAT() #TODO read bin
+        read_BIN() #TODO read bin
     
     
     # ======================== Generating ============================
@@ -78,15 +92,13 @@ def pltSSsur(arat_file='', is_csv = True):
         
         # surrogate the noise
         wavnoisur = aaft(wavnoise,1); # generate ONE AAFT surrogate     # uncomment for ssa & surr
+        '''wavnoisur = aaft(plotdata,1)''' # use whole waveform for comparison
+
+        # add back to original
+        wavssasur = np.add(wavsigf, wavnoisur) # uncomment for ssa & surr
+        '''wavssasur = wavnoisur'''
         
-        pass
+        surrdata[comp,:] = wavssasur;
     
+    return surrdata
     
-
-    
-
-    
-    
-
-if __name__ == '__main__':
-    pltSSsur()
