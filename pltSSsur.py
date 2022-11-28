@@ -10,9 +10,9 @@ from analyse.surrog import *
 
 
 def pltSSsur(arat_file='', is_csv = True):
-    # TODO
+    # TODO remove
     arat_file = 'P02_TS_2'
-    # TODO change to args parser
+
     numR=20;        # how many reconstructed to view - 5
     numComp=3;      # how many components x/y/z
     numFreq=3;      # how many frequency domain values
@@ -20,7 +20,7 @@ def pltSSsur(arat_file='', is_csv = True):
     plot_ok = True if arat_file == '' else False
     EVbp = []
 
-    # ========================== Read file ===============================
+    # ====================== Read file ===========================
 
     # get path and add file extension
     afp, arat_file = set_dataf(arat_file, is_csv)
@@ -33,16 +33,16 @@ def pltSSsur(arat_file='', is_csv = True):
     
     if is_csv:
         # read csv files and store data in numpy array
-        _data = np.genfromtxt(arat_file_path, delimiter=',')
-        _data = _data.transpose() # a * b -> b * a
-        data_len = _data.shape[1] # get length of data
+        accel = np.genfromtxt(arat_file_path, delimiter=',')
+        accel = accel.transpose() # a * b -> b * a
+        data_len = accel.shape[1] # get length of data
 
     else: # if binary file
         # resAll = np.zeros((numComp, numR, numFreq, 1))
         read_ARAT() #TODO read bin
     
     
-    # ========================= Generating ==============================
+    # ======================== Generating ============================
 
     # create array of all zeros with indicated dimension
     surrdata = np.zeros((numComp,data_len)); 
@@ -50,7 +50,7 @@ def pltSSsur(arat_file='', is_csv = True):
     # loop over the components of signal
     for comp in range(numComp):
         # time and frequency plot for 3 components of acceleration
-        plotdata = _data[comp,:];   # get one component of data
+        plotdata = accel[comp,:];   # get one component of data
 
         if plot_ok:
             #TODO function to plot
@@ -73,6 +73,11 @@ def pltSSsur(arat_file='', is_csv = True):
         for r in range ((EVbp[comp]+1), len(V)):
              wavnoise = wavnoise+R[:,r]
 
+        # Breitenberger's code removes mean so put back as a filtered signal
+        wavsigf = wavsig + np.mean(accel[comp,:]);
+        
+        # surrogate the noise
+        wavnoisur = aaft(wavnoise,1); # generate ONE AAFT surrogate     # uncomment for ssa & surr
         
         pass
     
