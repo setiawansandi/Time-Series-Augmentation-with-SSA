@@ -1,8 +1,6 @@
 import numpy as np
 import os
 import matplotlib.pyplot as plt
-import csv
-import sys
 
 from analyse.routines import *
 from analyse.ssa import *
@@ -19,9 +17,9 @@ def pltSSsur(arat_file, is_csv = True, numComp = 3, plot_ok = False):
     leave "noise" to be randomized by surrogate
 
     INPUT:   arat_file - file name of the sample data
-                is_csv - bool, True if the sample data file is csv
+                is_csv - bool, 'True' if the sample data file is csv
                numComp - number of components
-               plot_ok - bool, whether to display graph
+               plot_ok - bool, 'True' will return both file data and surrdata
 
     OUTPUT:   surrdata - surrogate data (matrix of 'numComp' columns)
 
@@ -53,7 +51,7 @@ def pltSSsur(arat_file, is_csv = True, numComp = 3, plot_ok = False):
 
     else: # if binary file
         # resAll = np.zeros((numComp, numR, numFreq, 1))
-        read_BIN() #TODO read bin
+        accel = read_BIN() #TODO read bin
     
     
     # ======================== Generating ============================
@@ -65,10 +63,6 @@ def pltSSsur(arat_file, is_csv = True, numComp = 3, plot_ok = False):
     for comp in range(numComp):
         # time and frequency plot for 3 components of acceleration
         plotdata = accel[comp,:];   # get one component of data
-
-        if plot_ok:
-            #TODO function to plot
-            pass
 
         # Eigenfunctions, Variances,   principAl components, Reconstructed, Covariance
         # Eigenvectors,   EigenValues, principAl components, Reconstructed, Covariance
@@ -100,5 +94,13 @@ def pltSSsur(arat_file, is_csv = True, numComp = 3, plot_ok = False):
         
         surrdata[comp,:] = wavssasur;
     
-    return surrdata
+    if plot_ok:
+        return accel, surrdata
     
+    return surrdata
+
+    
+if __name__ == '__main__':
+    _fn = input('Enter file name: ')
+    if _fn == '': _fn = 'P02_TS_2'
+    accel, surrdata = pltSSsur(_fn, numComp=3, plot_ok=True)
