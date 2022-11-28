@@ -33,7 +33,7 @@ def set_dataf(_file_name, is_csv):
 
 
 
-def read_ARAT(): #TODO
+def read_BIN(): #TODO
     '''
     read binary data
     '''

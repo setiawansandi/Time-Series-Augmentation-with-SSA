@@ -25,34 +25,49 @@ def aaft(xV, nsur):
     # The following gives the rank order, ixV
     # p.s.:    The zip(*iterable) idiom reverses the zip process (unzip).
     #          key argument specify which value to sort
-    #          return sorted matrix and previous syntax's index
+    #          return sorted matrix and previous syntax's index in tuple
     T1, oxV = zip(*sorted(enumerate(xV), key=itemgetter(1)))
     ixV, T = zip(*sorted(enumerate(T1), key=itemgetter(1)))
 
 
     # ====================== AAFT algorithm ======================
-    zV = np.zeros((n,nsur));
+    zV = np.zeros((n,nsur))
 
     for count in range(nsur):
+
         # Rank ordering white noise with respect to xV 
-        rv = np.random.randn(n, 1)
+        rv = np.random.randn(n, ) # returns an sz1-by-...-by-szN arr of random number
         T, orV = zip(*sorted(enumerate(rv), key=itemgetter(1)))
         yV = np.asarray(orV)[np.asarray(ixV)] # convert tuple to np.array then sort
     
-        # Phase randomisation (Fourier Transform): yV -> yftV 
+        # >>>>> Phase randomisation (Fourier Transform): yV -> yftV 
         if n % 2 == 0:
             n2 = n//2
         else:
             n2 = (n-1)//2
         
-        yV = yV.flatten() # to 1D array
         tmpV = fft(yV,n=2*n2)
-        
-    '''
-    for count=1:nsur;
-        rV = randn(n,1); % Rank ordering white noise with respect to xV 
-        [orV,T]=sort(rV);   
-        yV = orV(ixV); % Y
-    '''
+        magnV = abs(tmpV)
+        fiV = np.angle(tmpV)
+        rfiV = np.random.randn(n2-1, ) * 2 * np.pi
+        nfiV = np.hstack(([0], rfiV, fiV[n2], -np.flipud(rfiV)))
 
-    return -1
+        # New Fourier transformed data with only the phase changed
+        tmpV = np.hstack((magnV[0:n2+1].T, np.flipud(magnV[1:n2]).T)).T # so tmpV = magnV?
+        check = tmpV.copy()
+        tmpV = np.multiply(tmpV, np.exp(nfiV * 1j))
+
+        # Transform back to time domain
+        yftV = np.real(ifft(tmpV, n)) # 3-step AAFT
+
+        # <<<<<
+
+        # Rank ordering xV with respect to yftV
+        T2, T = zip(*sorted(enumerate(yftV), key=itemgetter(1)))
+        iyftV, T = zip(*sorted(enumerate(T2), key=itemgetter(1)))
+
+        # zV is the AAFT surrogate of xV
+        zV[:,count] = np.asarray(oxV)[np.asarray(iyftV)]
+        if count == 0: zV = zV.flatten()
+        
+    return zV
