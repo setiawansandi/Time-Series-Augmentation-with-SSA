@@ -1,5 +1,5 @@
 import os
-from numpy import mean, power, argmin
+from numpy import mean, power, argmin, savetxt
 from math import log
 from pathlib import Path
 
@@ -55,14 +55,17 @@ def set_work_dir(dir_name):
 
     Syntax: [work_dir_path] = set_work_dir(drv)
 
+    Create directory to store the generated surrogate data,
+    clear the directory first if it's not empty.
+
     Input: dir_name - directory name
 
     Returns
     -------
-    work_dir_path - path to newly created working directory
+    work_dir_path - absolute path to working directory
     
     '''
-
+    #TODO CLEAR CONTENT
     # get current file (routines.py) path
     current_dir = os.path.dirname(os.path.realpath(__file__))
     # get relative path to parent dir + join with work dir name
@@ -82,5 +85,30 @@ def set_work_dir(dir_name):
 
 
 
-def delete_work_dir(work_dir_path):
+def save_as_csv(res, filename):
+    ''' Save result as CSV
+
+    Syntax: set_work_dir(res, filename, index)
+
+    Create directory of classes (according to 'Score'),
+    result is saved in respective directory
+
+    Input: 
+
+    Returns
+    -------
+    None
+    '''
+    file_split = os.path.split(filename)
+    try:
+        os.makedirs(file_split[0])
+        print(f'[INFO] Directory {file_split[0]} is created successfully!')
+    except OSError as error:
+        pass
+    
+    savetxt(filename, res, delimiter=',')
+
+
+
+def save_as_pickle():
     pass
