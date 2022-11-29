@@ -4,18 +4,24 @@ import re
 from analyse.routines import *
 from pltSSsur import pltSSsur
 
-def allSurr1D(data_dir = 'data', score_file = 'ARScore.txt', *,save_as):
+def allSurr1D(*, data_dir, score_file, save_as, nSur, fold_no):
+    ''' Generate surrogate data for all files in data set
+
+    Input:  data_dir - &emsp;&emsp;- data directory
+          score_file - score file containing which class the data belong to
+             save_as - save output as csv or pickle
+                nSur - proportion of surrogate data to be generated (to balance data distribution)
+             fold_no - how much the data is going to augmented (x fold)
+    
+    Returns:
+        .csv files in wrkdir
+        or
+        .pkl file
+    '''
 
     valid = {'csv', 'pkl'}
     if save_as not in valid:
         raise ValueError(f"Invalid value for argument 'save_as'! Valid value: {valid}")
-
-    nClass = [0, 1, 2, 3] # classes
-
-    # proportion - to prevent one class overshadows other classes
-    # the higher the no.of sample in the class, the lower the value of nSur
-    nSur = [12, 6, 1, 1] #TODO <-- manually tuned to auto
-    fold_no = 30 # how many times the data is augmented from one sample
     
     # no. of surrogates depend on score
     nSur = np.dot(nSur, fold_no)
@@ -61,4 +67,4 @@ def allSurr1D(data_dir = 'data', score_file = 'ARScore.txt', *,save_as):
 
 
 if __name__ == '__main__':
-    allSurr1D(save_as="csv")
+    allSurr1D(data_dir = 'data', score_file = 'ARScore.txt', save_as="csv")
