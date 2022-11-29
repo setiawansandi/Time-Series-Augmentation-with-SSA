@@ -1,6 +1,7 @@
 import os
 from numpy import mean, power, argmin
 from math import log
+from pathlib import Path
 
 def set_dataf(_file_name, is_csv):
     '''Getting and setting data path
@@ -58,5 +59,39 @@ def get_min(V):
 
     return argmin(nlgd)
     
-    
 
+    
+def set_work_dir(dir_name):
+    ''' Create working directory
+
+    Syntax: [work_dir_path] = set_work_dir(drv)
+
+    Input: dir_name - directory name
+
+    Returns
+    -------
+    work_dir_path - path to newly created working directory
+    
+    '''
+
+    # get current file (routines.py) path
+    current_dir = os.path.dirname(os.path.realpath(__file__))
+    # get relative path to parent dir + join with work dir name
+    work_dir_path = os.path.abspath(os.path.join(current_dir, os.pardir, dir_name))
+
+    # create the directory
+    try:
+        # os.makedirs() method will raise an OSError if the directory
+        # to be created already exists. But It can be suppressed by
+        # setting the value of a parameter exist_ok as True
+        os.makedirs(work_dir_path, exist_ok=True)
+        print(f'[INFO] Directory {work_dir_path} is created successfully!')
+    except OSError as error:
+        print(f'[ERROR] Directory {work_dir_path} can\'t be created')
+    
+    return work_dir_path
+
+
+
+def delete_work_dir(work_dir_path):
+    pass
