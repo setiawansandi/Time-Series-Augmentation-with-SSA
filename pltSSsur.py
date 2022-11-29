@@ -7,16 +7,16 @@ from analyse.ssa import *
 from analyse.surrog import *
 
 
-def pltSSsur(arat_file, is_csv = True, numComp = 3, plot_ok = False):
+def pltSSsur(file_name, numComp = 3, plot_ok = False):
     ''' perform SSA decomposition
 
-    Syntax: [surrdata] = pltSSsur(arat_file, is_csv, numComp)
+    Syntax: [surrdata] = pltSSsur(file_name, is_csv, numComp)
 
     perform SSA decomposition of signals from a file of ARAT data
     and do reconstruction based on significant eigenvalues
     leave "noise" to be randomized by surrogate
 
-    INPUT:   arat_file - file name of the sample data
+    INPUT:   file_name - file name of the sample data
                 is_csv - bool, 'True' if the sample data file is csv
                numComp - number of components
                plot_ok - bool, 'True' will return both file data and surrdata
@@ -27,33 +27,32 @@ def pltSSsur(arat_file, is_csv = True, numComp = 3, plot_ok = False):
     '''
     
     numR=20;        # how many reconstructed to view - 5
-    numComp=numComp;      # how many components x/y/z
+    numComp=numComp;# how many components x/y/z
     numFreq=3;      # how many frequency domain values
     M = 17          # embedding dimension
     EVbp = []
 
     # ====================== Read file ===========================
 
-    # get path and add file extension
-    arat_file_path = set_data_file(arat_file)
+    # get file path
+    data_file_path = set_data_file(file_name)
 
     # check if file exist in dir
-    if not os.path.isfile(arat_file_path):
-        raise Exception(f'{arat_file} does not exist!')
+    if not os.path.isfile(data_file_path):
+        raise Exception(f'{file_name} does not exist!')
     
-    if is_csv:
+    fe = os.path.splitext(file_name)[-1].lower() # get file extension
+    if fe == '.csv':
         # read csv files and store data in numpy array
-        accel = np.genfromtxt(arat_file_path, delimiter=',')
+        accel = np.genfromtxt(data_file_path, delimiter=',')
         accel = accel.transpose() # a * b -> b * a
         data_len = accel.shape[1] # get length of data
 
-    else: # if binary file
-        # resAll = np.zeros((numComp, numR, numFreq, 1))
-        accel = read_BIN() #TODO read bin
-    
-    #################
-    # basename = os.path.basename(path)
-    #################
+    elif fe == '.bin':
+        raise Exception("method to read .bin is not implemented")
+        '''accel = read_BIN()''' #TODO read bin
+    else:
+        raise Exception(f"Invalid file format! {fe} file is not accepted")
     
     # ======================== Generating ============================
 

@@ -3,27 +3,6 @@ from numpy import mean, power, argmin
 from math import log
 from pathlib import Path
 
-def set_dataf(file_name, is_csv):
-    '''Getting and setting data path
-
-    If the arguement _file_name is null, prompt for name
-    If the argument is_csv is True, use .csv file extension
-
-    Returns
-    -------
-        file_path: string of the path to the file
-        String: string of file name
-    '''
-
-    file_path = os.path.dirname(os.path.realpath(__file__))
-
-    # os.path.join will concatenate the path.
-    # os.path.abspath will interprate os.pardir as 
-    # going up by one directory + return abs path.
-    file_path = os.path.abspath(os.path.join(file_path, os.pardir, "data"))
-
-    return file_path, file_name
-
 
 def set_data_file(file_name):
     '''set data path
