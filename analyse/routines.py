@@ -4,7 +4,7 @@ from math import log
 from pathlib import Path
 
 
-def set_data_file(file_name):
+def set_data_file(file_name, data_dir_path):
     '''set data path
 
     Syntax: [file_abs_path] = set_data_file(file_name)
@@ -14,12 +14,10 @@ def set_data_file(file_name):
         file_abs_path - absolute path to the data file
     '''
 
-    current_path = os.path.dirname(os.path.realpath(__file__))
-
     # os.path.join will concatenate the path.
     # os.path.abspath will interprate os.pardir as 
     # going up by one directory + return abs path.
-    file_abs_path = os.path.abspath(os.path.join(current_path, os.pardir, "data", file_name))
+    file_abs_path = os.path.abspath(os.path.join(data_dir_path, os.pardir, "data", file_name))
 
     return file_abs_path
 

@@ -7,7 +7,7 @@ from analyse.ssa import *
 from analyse.surrog import *
 
 
-def pltSSsur(file_name, numComp = 3, plot_ok = False):
+def pltSSsur(file_name, *, data_dir_path, numComp = 3, plot_ok = False):
     ''' perform SSA decomposition
 
     Syntax: [surrdata] = pltSSsur(file_name, is_csv, numComp)
@@ -35,15 +35,16 @@ def pltSSsur(file_name, numComp = 3, plot_ok = False):
     # ====================== Read file ===========================
 
     # get file path
-    data_file_path = set_data_file(file_name)
+    data_file_path = set_data_file(file_name, data_dir_path)
 
     # check if file exist in dir
     if not os.path.isfile(data_file_path):
-        raise Exception(f'{file_name} does not exist!')
+        raise Exception(f'{file_name} does not exist!'
+            ' Check if file name or extension is correct')
     
     fe = os.path.splitext(file_name)[-1].lower() # get file extension
-    if fe == '.csv':
-        # read csv files and store data in numpy array
+    if fe == '.csv' or fe == '.txt':
+        # read and store the data in a numpy array
         accel = np.genfromtxt(data_file_path, delimiter=',')
         accel = accel.transpose() # a * b -> b * a
         data_len = accel.shape[1] # get length of data
