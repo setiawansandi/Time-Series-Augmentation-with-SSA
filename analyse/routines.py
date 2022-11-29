@@ -93,7 +93,8 @@ def save_as_csv(res, filename):
     Create directory of classes (according to 'Score'),
     result is saved in respective directory
 
-    Input: 
+    Input:      res - result to be stored as csv
+           filename - path to where file is stored (inc. file name)
 
     Returns
     -------
