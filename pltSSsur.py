@@ -35,9 +35,7 @@ def pltSSsur(arat_file, is_csv = True, numComp = 3, plot_ok = False):
     # ====================== Read file ===========================
 
     # get path and add file extension
-    afp, arat_file = set_dataf(arat_file, is_csv)
-
-    arat_file_path = os.path.join(afp, arat_file)
+    arat_file_path = set_data_file(arat_file)
 
     # check if file exist in dir
     if not os.path.isfile(arat_file_path):
@@ -53,6 +51,9 @@ def pltSSsur(arat_file, is_csv = True, numComp = 3, plot_ok = False):
         # resAll = np.zeros((numComp, numR, numFreq, 1))
         accel = read_BIN() #TODO read bin
     
+    #################
+    # basename = os.path.basename(path)
+    #################
     
     # ======================== Generating ============================
 
@@ -102,5 +103,5 @@ def pltSSsur(arat_file, is_csv = True, numComp = 3, plot_ok = False):
     
 if __name__ == '__main__':
     _fn = input('Enter file name: ')
-    if _fn == '': _fn = 'P02_TS_2'
+    if _fn == '': _fn = 'P02_TS_2.csv' # for testing
     accel, surrdata = pltSSsur(_fn, numComp=3, plot_ok=True)

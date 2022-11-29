@@ -3,7 +3,7 @@ from numpy import mean, power, argmin
 from math import log
 from pathlib import Path
 
-def set_dataf(_file_name, is_csv):
+def set_dataf(file_name, is_csv):
     '''Getting and setting data path
 
     If the arguement _file_name is null, prompt for name
@@ -11,26 +11,38 @@ def set_dataf(_file_name, is_csv):
 
     Returns
     -------
-        String: string of the path to the file
+        file_path: string of the path to the file
         String: string of file name
     '''
 
-    if _file_name == '':
-        _file_name = input("Enter file name: ")
-    
-    if (is_csv):
-        _file_name += '.csv'
-    else:
-        _file_name += '.bin'
-
-    _file_path = os.path.dirname(os.path.realpath(__file__))
+    file_path = os.path.dirname(os.path.realpath(__file__))
 
     # os.path.join will concatenate the path.
     # os.path.abspath will interprate os.pardir as 
     # going up by one directory + return abs path.
-    _file_path = os.path.abspath(os.path.join(_file_path, os.pardir, "data"))
+    file_path = os.path.abspath(os.path.join(file_path, os.pardir, "data"))
 
-    return _file_path, _file_name
+    return file_path, file_name
+
+
+def set_data_file(file_name):
+    '''set data path
+
+    Syntax: [file_abs_path] = set_data_file(file_name)
+
+    Returns
+    -------
+        file_abs_path - absolute path to the data file
+    '''
+
+    current_path = os.path.dirname(os.path.realpath(__file__))
+
+    # os.path.join will concatenate the path.
+    # os.path.abspath will interprate os.pardir as 
+    # going up by one directory + return abs path.
+    file_abs_path = os.path.abspath(os.path.join(current_path, os.pardir, "data", file_name))
+
+    return file_abs_path
 
 
 
