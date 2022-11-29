@@ -17,11 +17,12 @@ def pltSSsur(file_name, *, data_dir_path, numComp = 3, plot_ok = False):
     leave "noise" to be randomized by surrogate
 
     INPUT:   file_name - file name of the sample data
-                is_csv - bool, 'True' if the sample data file is csv
-               numComp - number of components
-               plot_ok - bool, 'True' will return both file data and surrdata
+               numComp - number of components (columns) in a file
+               plot_ok - bool, 'True' will return both sample data and surrdata for plotting
+         data_dir_path - path to data folder (can be absolute or relative)
 
-    OUTPUT:   surrdata - surrogate data (matrix of 'numComp' columns)
+    OUTPUT:   surrdata - generated surrogate data (contains matrix of 'numComp'-columns)
+           sample_data - (optional) original sample data
 
     TL 2022
     '''
@@ -45,9 +46,9 @@ def pltSSsur(file_name, *, data_dir_path, numComp = 3, plot_ok = False):
     fe = os.path.splitext(file_name)[-1].lower() # get file extension
     if fe == '.csv' or fe == '.txt':
         # read and store the data in a numpy array
-        accel = np.genfromtxt(data_file_path, delimiter=',')
-        accel = accel.transpose() # a * b -> b * a
-        data_len = accel.shape[1] # get length of data
+        sample_data = np.genfromtxt(data_file_path, delimiter=',')
+        sample_data = sample_data.transpose() # a * b -> b * a
+        data_len = sample_data.shape[1] # get length of data
 
     elif fe == '.bin':
         raise Exception("method to read .bin is not implemented")
@@ -63,7 +64,7 @@ def pltSSsur(file_name, *, data_dir_path, numComp = 3, plot_ok = False):
     # loop over the components of signal
     for comp in range(numComp):
         # time and frequency plot for 3 components of acceleration
-        plotdata = accel[comp,:];   # get one component of data
+        plotdata = sample_data[comp,:];   # get one component of data
 
         # Eigenfunctions, Variances,   principAl components, Reconstructed, Covariance
         # Eigenvectors,   EigenValues, principAl components, Reconstructed, Covariance
@@ -83,7 +84,7 @@ def pltSSsur(file_name, *, data_dir_path, numComp = 3, plot_ok = False):
              wavnoise = wavnoise+R[:,r]
 
         # Breitenberger's code removes mean so put back as a filtered signal
-        wavsigf = wavsig + np.mean(accel[comp,:]);
+        wavsigf = wavsig + np.mean(sample_data[comp,:]);
         
         # surrogate the noise
         wavnoisur = aaft(wavnoise,1); # generate ONE AAFT surrogate     # uncomment for ssa & surr
@@ -96,7 +97,7 @@ def pltSSsur(file_name, *, data_dir_path, numComp = 3, plot_ok = False):
         surrdata[comp,:] = wavssasur;
     
     if plot_ok:
-        return accel, surrdata
+        return sample_data, surrdata
     
     return surrdata
 
@@ -104,4 +105,4 @@ def pltSSsur(file_name, *, data_dir_path, numComp = 3, plot_ok = False):
 if __name__ == '__main__':
     _fn = input('Enter file name: ')
     if _fn == '': _fn = 'P02_TS_2.csv' # for testing
-    accel, surrdata = pltSSsur(_fn, numComp=3, plot_ok=True)
+    sample_data, surrdata = pltSSsur(_fn, numComp=3, plot_ok=True, data_dir_path='data')
