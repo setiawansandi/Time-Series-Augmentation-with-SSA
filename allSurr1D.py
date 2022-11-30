@@ -64,7 +64,3 @@ def allSurr1D(*, data_dir, score_file, save_as, nSur, fold_no):
 
         print(f'[INFO] {ds_indx} surrogate data generated from {filename}')
         
-
-
-if __name__ == '__main__':
-    allSurr1D(data_dir = 'data', score_file = 'ARScore.txt', save_as="csv")
