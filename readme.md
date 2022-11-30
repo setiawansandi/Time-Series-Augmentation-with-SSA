@@ -6,7 +6,7 @@ This project was created to allow for the augmentation of time-series dataset. T
 
 Lee, Tracey & Chan, H. & Leo, K. & Chew, Effie & Zhao, Ling & Sanei, Saeid. (2022). Improving Rehabilitative Assessment with Statistical and Shape Preserving Surrogate Data and Singular Spectrum Analysis. 58-63. 10.23919/SPA53010.2022.9927805. 
 
-
+<br/>
 
 # How to run Time-Series-Date-Augmentation
 
@@ -41,24 +41,32 @@ Lee, Tracey & Chan, H. & Leo, K. & Chew, Effie & Zhao, Ling & Sanei, Saeid. (202
 
 4. [Troubleshooting]()
 
-
-
-
-
-
+<br/>
 
 # Getting Started [[Top]()]
 
----
-
 ## 1. Install Python
 
+Before running this project, you'll need to install Python.
+
+* [Here is a link to the Python downloads page.](https://www.python.org/downloads/)
+
+* [Here is a helpful guide to installing Python on various operating systems.](https://wiki.python.org/moin/BeginnersGuide/Download)
+  
+  <br/>
+
+____
+
+<br/>
+
+## 2. Install Anaconda
+
 ---
 
-Before running this project, you'll need to install Python
+* [Here is a link to the Anaconda Installer.](https://www.anaconda.com/)
 
-* Here is a link to the Python downloads page.
+* [Here is a helpful guide to installing Anaconda on various operating systems.](https://docs.anaconda.com/anaconda/install/index.html)
 
-* [Here is a helpful guide to installing Python on various operating systems]([BeginnersGuide/Download - Python Wiki](https://wiki.python.org/moin/BeginnersGuide/Download))
+<br/>
 
 
