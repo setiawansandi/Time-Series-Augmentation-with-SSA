@@ -105,4 +105,4 @@ def pltSSsur(file_name, *, data_dir_path, numComp = 3, plot_ok = False):
 if __name__ == '__main__':
     _fn = input('Enter file name: ')
     if _fn == '': _fn = 'P02_TS_2.csv' # for testing
-    sample_data, surrdata = pltSSsur(_fn, numComp=3, plot_ok=True, data_dir_path='data')
+    surrdata = pltSSsur(_fn, numComp=3, plot_ok=False, data_dir_path='data')
