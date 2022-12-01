@@ -131,4 +131,6 @@ dmypy.json
 .vscode
 in-progress/
 test.py
+readme.txt
 /wrkdir
+/saved_surr
