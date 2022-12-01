@@ -1,6 +1,7 @@
 import numpy as np
 import os
 import re
+import shutil
 from analyse.routines import *
 from pltSSsur import pltSSsur
 
@@ -26,8 +27,10 @@ def allSurr1D(*, data_dir, score_file, save_as, nSur, fold_no):
     # no. of surrogates depend on score
     nSur = np.dot(nSur, fold_no)
 
-    # set working directory, clear content if not empty
-    work_dir_path = set_work_dir("wrkdir")
+    # delete directory including its content
+    shutil.rmtree(r'wrkdir') 
+    # set working directory
+    work_dir_path = set_work_dir(r"wrkdir")
 
     # get the score from txt file
     data_score = dict()

@@ -1,6 +1,5 @@
 import numpy as np
 import os
-import matplotlib.pyplot as plt
 
 from analyse.routines import *
 from analyse.ssa import *
@@ -54,7 +53,7 @@ def pltSSsur(file_name, *, data_dir_path, numComp = 3, plot_ok = False):
         raise Exception("method to read .bin is not implemented")
         '''accel = read_BIN()''' #TODO read bin
     else:
-        raise Exception(f"Invalid file format! {fe} file is not accepted")
+        raise ValueError(f"Invalid file format! {fe} file is not accepted")
     
     # ======================== Generating ============================
 
