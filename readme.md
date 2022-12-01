@@ -10,34 +10,33 @@ Lee, Tracey & Chan, H. & Leo, K. & Chew, Effie & Zhao, Ling & Sanei, Saeid. (202
 
 # How to run Time-Series-Date-Augmentation
 
-<br/>
-
 ## Table of Contents
 
 1. [Getting Started](#getting-started)
    
-   * [Install Python]()
-   + [Install Anaconda]()
+   1. [Install Python]()
    
-   + [Create Conda Environment]()
+   2. [Install Anaconda]()
    
-   + [Install Dependencies]()
+   3. [Create Conda Environment]()
+   
+   4. [Install Dependencies]()
 
 2. [Project Structure]()
    
-   * [Directory Structure]()
+   1. [Directory Structure]()
    
-   * [Data Directory]()
-     
-     * [Score File]()
-     
-     * [Data File Naming Convention]()
-   
-   * [wrkdir Directory]()
+   2. [Data Directory]()
+      
+      1. [Score File]()
+      
+      2. [Data File Naming Convention]()
+      
+      3. [wrkdir Directory]()
 
 3. [Run the project]()
    
-   * [Setting up]()
+   1. [Setting up]()
 
 4. [Troubleshooting]()
 
