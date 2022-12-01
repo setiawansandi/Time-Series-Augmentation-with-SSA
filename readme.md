@@ -131,8 +131,7 @@ time-series-data-augmentation
 * data: dataset directory.
 * **allSurr1D.py**: script to generate surrogate data from all the files in data dir.
 * **pltSSsur.py**: script to generate one surrogate data from one sample data.
-* **run_allSSurr1D.ipynb**: contains variables to be assigned to allSurr1D's parameter, save generated surrogate data, and clear working directory.
-* **run_pltSSsur.ipynb**: plot surrogate data generated from pltSSsur.py
+* **run_allSSurr1D.ipynb, run_pltSSsur.ipynb** : jupyter notebook to run the script. Generate surrogate from either all sample or one sample, plot graph, save synthesized data, and plot the output.
 
 ---
 
@@ -160,7 +159,7 @@ time-series-data-augmentation
 
 * ### Data File Naming Convention
   
-  Generally, each sample file name should follow this naming convention:
+  Generally, each sample file should follow this naming convention:
   
   ```
   <Sample Name><Seperator><Identifier>
@@ -196,10 +195,10 @@ time-series-data-augmentation
   
   To run the project, go to either of these jupyter notebook files:
   
-  | Name                | Description                                                 |
-  | ------------------- | ----------------------------------------------------------- |
-  | run_allSurr1D.ipynb | Generate surrogate data for all files in data set.          |
-  | run_pltSSsur.ipynb  | Generate surrogate data for one sample and plot the output. |
+  | Name                | Description                                                                        |
+  | ------------------- | ---------------------------------------------------------------------------------- |
+  | run_allSurr1D.ipynb | Generates surrogate data for all files in data set and saves the output to wrkdir. |
+  | run_pltSSsur.ipynb  | Generates surrogate data for one sample and plot the output.                       |
   
   <br/>
   
@@ -221,4 +220,5 @@ time-series-data-augmentation
 
 # Troubleshooting <small>[[Top](#table-of-contents)]</small>
 
-* cannot find conda in path
+* cannot find conda in path - pray to jesus
+* 
