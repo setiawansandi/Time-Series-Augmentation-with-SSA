@@ -102,6 +102,10 @@ def pltSSsur(file_name, *, data_dir_path, numComp = 3, plot_ok = False):
 
     
 if __name__ == '__main__':
-    _fn = input('Enter file name: ')
-    if _fn == '': _fn = 'P02_TS_2.csv' # for testing
-    surrdata = pltSSsur(_fn, numComp=3, plot_ok=False, data_dir_path='data')
+    from screen.input_box import InputBox
+    from PyQt5.QtWidgets import QApplication
+    import sys
+
+    App = QApplication(sys.argv) # create pyqt5 app
+    ib = InputBox(total_entry=3, fe='csv', separator='_') # Input box config
+    sys.exit(App.exec()) # start the app
