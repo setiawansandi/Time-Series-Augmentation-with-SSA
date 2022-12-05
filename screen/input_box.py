@@ -1,125 +1,123 @@
-from tkinter import Tk, Canvas, Entry, Text, PhotoImage, Frame, Label, font
-import os
-from screen.utils.utils import relative_to_assets
+from PyQt5.QtWidgets import * 
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtGui import * 
+from PyQt5.QtCore import * 
+import sys
 
-class InputBox(Frame):
-
-    def __init__(self, parent, *, input_no, fe, seperator):
-        Frame.__init__(self, parent)
-        
-        self.parent = parent
-        self.ad = "input_box" # asset dir
-        self.input_no = input_no
+from screen.plotly_viewer import PlotlyViewer
+from pltSSsur import pltSSsur
+  
+class InputBox(QMainWindow):
+  
+    def __init__(self, total_entry = 3, *, fe, separator):
+        super().__init__()
+        self._total_entry = total_entry
         self.fe = fe
+        self.separator = separator
+        self.w = None # plot window
 
-        self.parent.bind('<Return>', self.on_enter) # when enter is pressed
+        self.setWindowTitle("Enter File Name")
+        # self.resize(453,117) # resize() will auto center the window
+        self.setGeometry(QtCore.QRect(30, 490, 453, 117))
+        self.UiComponents() # initializing ui      
+        self.show() # showing all the widgets
+  
 
-        self.normal_font = font.Font(family="Inter", size=-16)
-        small_font = font.Font(family="Inter", size=-14)
-        bold_font = font.Font(family="Inter", size=-18, weight="bold")
+    def UiComponents(self):
+        # https://stackoverflow.com/questions/54749161/what-is-the-rule-for-choosing-central-widget-in-qmainwindow-and-why-is-it-imp
+        # tldr: not important unless you want to have extra components
+        #       such as toolbar, menubar, docker, etc
+        self.centralwidget = QtWidgets.QWidget(self)
+        # objectName acts similar to id
+        self.centralwidget.setObjectName("centralwidget")
+        self.setCentralWidget(self.centralwidget)
 
-        self.canvas = Canvas(
-            self,
-            bg = "#FFFFFF",
-            height = 138,
-            width = 404,
-            bd = 0,
-            highlightthickness = 0,
-            relief = "ridge"
-        )
+        # initialisation
+        segoe = QtGui.QFont()
+        segoe.setFamily("Segoe UI")
+        segoe.setPointSize(9)
 
-        self.canvas.place(x = 0, y = 0)
-        self.canvas.create_text(
-            21.6552734375,
-            22.0,
-            anchor="nw",
-            text="Input file name",
-            fill="#000000",
-            font=bold_font
-        )
+        segoe_sb = QtGui.QFont()
+        segoe_sb.setFamily("Segoe UI Semibold")
+        segoe_sb.setPointSize(9)
 
-        self.canvas.create_text(
-            156,
-            23.0,
-            anchor="nw",
-            text="(ignore separator and extension):",
-            fill="#000000",
-            font=self.normal_font
-        )
+        self.label = QtWidgets.QLabel(self.centralwidget)
+        self.label.setGeometry(QtCore.QRect(20, 20, 351, 21))
+        self.label.setFont(segoe)
+        self.label.setObjectName("label")
+        self.label.setText("Press [Tab] to change entry, and [Enter] to submit")
 
-        self.canvas.create_text(
-            22.0,
-            48.0478515625,
-            anchor="nw",
-            text="e.g.: sample_TS_1.csv -> [sample] [TS] [1]",
-            fill="#000000",
-            font=small_font
-        )
+        self.inputContainerWidget = QtWidgets.QWidget(self.centralwidget)
+        self.inputContainerWidget.setGeometry(QtCore.QRect(20, 50, 416, 51))
+        self.inputContainerWidget.setObjectName("inputContainer")
+        # convert widget to layout
+        self.inputContainerLayout = QtWidgets.QHBoxLayout(self.inputContainerWidget)
+        self.inputContainerLayout.setContentsMargins(0, 0, 0, 0)
+        self.inputContainerLayout.setObjectName("inputContainerLayout")
 
-        self.load_box(input_no)
-        
-
-
-    def load_box(self, count=3):
-        self.box_container = []
-        img_container = []
-        entry_gap = 0
-        img_gap = 0
-
-        self.entry_image_1 = PhotoImage(
-                file=relative_to_assets(self.ad, "entry_1.png"))
-
-        for i in range(count):
-
-            img_container.append(
-                self.canvas.create_image(
-                    74.0 + img_gap,
-                    97.5478515625,
-                    image=self.entry_image_1
-                )
-            )
-            img_gap += 97.5478 + 29.5 # width + gap
-
-            self.box_container.append(
-                Entry(
-                    bd=0,
-                    bg="#dce7fa",
-                    fg="#000716",
-                    highlightthickness=0,
-                    font=self.normal_font
-                )
-            ) 
-
-            self.box_container[i].place(
-                x=27 + entry_gap,
-                y=81,
-                width=94.0,
-                height=34.0
-            )
-
-            if i == 0:
-                self.box_container[i].focus()
-
-            entry_gap += 94 + 33 # width + gap
-        
+        self.entry_list = []
+        for i in range(self._total_entry):
+            self.entry_list.append(self.create_entry(self.inputContainerWidget))
+            self.inputContainerLayout.addWidget(self.entry_list[i])
 
 
-    def get_file_name(self):
-        return self.file_name
+    def create_entry(self, parentWidget):
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI Semibold")
+        font.setPointSize(9)
+        line_style = '''
+        QLineEdit
+        {background : lightblue;}
+        '''
+
+        lineEdit = QtWidgets.QLineEdit(parentWidget)
+        lineEdit.setMinimumSize(QtCore.QSize(0, 30))
+        lineEdit.setFont(font)
+        lineEdit.setStyleSheet(line_style)
+        lineEdit.setObjectName("lineEdit")
+
+        return lineEdit
+
     
-
-
-    def on_enter(self, event=None):
-        from pltSSsur import pltSSsur
+    def show_plot(self, file_data, surr_data, numComp,*, fn=''):
         from screen.utils.utils import plotly_gen
-        from screen.utils.plotly_viewer import PlotlyViewer
+        fig = plotly_gen(file_data, surr_data, numComp=numComp, file_name=fn)
+        self.w = PlotlyViewer(fig)
+        self.w.show()
 
-        print("Entered")
-        _fn = 'P02_TS_2.csv' # for testing
-        _numComp = 3
-        file_data, surr_data = pltSSsur(_fn, numComp=_numComp, plot_ok=True, data_dir_path='data')
+    
+    def constuct_fn(self):
+        fn = ''
+        for i in range(len(self.entry_list)):
+            text = self.entry_list[i].text()
+            fn += text
+            if text != '':
+                fn +=  self.separator
+        if fn [-1] == self.separator:
+            fn = fn[:-1]
+        fn = fn + '.' + self.fe
 
+        return fn
+
+    
+    # @override
+    def keyPressEvent(self, event):
+        import logging
+        logger=logging.getLogger()
         
-        plotly_gen(file_data, surr_data, _numComp=_numComp, _file_name=_fn)
+        if event.key() == Qt.Key_Return:
+            try:
+                _fn = self.constuct_fn() # construct file name
+                
+                numComp = 3
+                file_data, surr_data = pltSSsur(_fn, numComp=numComp, plot_ok=True, data_dir_path='data')
+
+                self.show_plot(file_data, surr_data, numComp, fn=_fn)
+            except Exception as e:
+                logger.exception(str(e))
 
 
+if __name__ == '__main__':  
+    App = QApplication(sys.argv) # create pyqt5 app
+    window = InputBox(total_entry=3, fe='csv', separator='_') # create the instance of our Window
+    sys.exit(App.exec()) # start the app
