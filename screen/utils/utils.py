@@ -1,5 +1,5 @@
 
-# find the path of a screen's assets
+# TKinter - find the path of a screen's assets
 def center_window_on_screen(window, width, height):
     screen_width = window.winfo_screenwidth()  # Width of the screen
     screen_height = window.winfo_screenheight()  # Height of the screen
@@ -14,6 +14,7 @@ def center_window_on_screen(window, width, height):
 
 
 
+# TKinter
 def relative_to_assets(asset_dir, asset_name):
     import os
 
@@ -24,7 +25,7 @@ def relative_to_assets(asset_dir, asset_name):
 
 
 
-def plotly_gen(file_data, surr_data, *, _numComp, _file_name, is_jupyter=False):
+def plotly_gen(file_data, surr_data, *, numComp, file_name, is_jupyter=False):
     ''' Plot generated surrogate data
     
     if the method is run on jupyter notebook (set is_jupyter to 'True'), 
@@ -41,15 +42,16 @@ def plotly_gen(file_data, surr_data, *, _numComp, _file_name, is_jupyter=False):
     surr_colour = '#00cc96'
 
     fig = make_subplots(
-        rows=_numComp, cols=2,
-        subplot_titles=("Original", "Surrogate"))
+        rows=numComp, cols=2,
+        subplot_titles=("Original", "Surrogate"),
+        vertical_spacing=0.10)
 
     x_coor = [x for x in range(file_data.shape[1])]
 
     show_legend = True
     ori_str = "Original"
     surr_str ="Surrogate"
-    for i in range (_numComp):
+    for i in range (numComp):
         if i != 0: 
             show_legend = False
             ori_str = "Original " + str(i+1)
@@ -79,11 +81,26 @@ def plotly_gen(file_data, surr_data, *, _numComp, _file_name, is_jupyter=False):
                     size=4)),
             row=i+1, col=2)
         
-    
-    # Update title and height
-    fig.update_layout(title_text=_file_name + " SSA plot", height=700, width=900)
 
     if is_jupyter:
+        # Update title and height
+        fig.update_layout(
+            title_text=file_name + " SSA plot", 
+            height=700, 
+            width=900,
+            )
         fig.show()
     else:
+        fig.update_layout(
+            title_text=file_name + " SSA plot", 
+            margin=dict(
+                l=50,
+                r=50,
+                b=50,
+                t=50,
+                # pad = 4
+            ),
+            showlegend=False)
         return fig # send fig variable to be displayed on windowed mode
+
+
