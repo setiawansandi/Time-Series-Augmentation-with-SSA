@@ -15,4 +15,7 @@ class PlotlyViewer(QtWebEngineWidgets.QWebEngineView):
         self.resize(930, 750)
 
     def closeEvent(self, event):
-        os.remove(self.file_path)
+        try:
+            os.remove(self.file_path)
+        except:
+            pass
