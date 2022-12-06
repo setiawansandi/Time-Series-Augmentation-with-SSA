@@ -16,9 +16,18 @@ class InputBox(QMainWindow):
         self.separator = separator
         self.w = None # plot window
 
+        # keep main window on top when another window is open
+        self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
+
         self.setWindowTitle("Enter File Name")
         # self.resize(453,117) # resize() will auto center the window
-        self.setGeometry(QtCore.QRect(30, 490, 453, 117))
+        winSize = [453, 117]
+        centerPoint = QDesktopWidget().availableGeometry().center()
+        xPos = centerPoint.x() - winSize[0]//2 - 710
+        yPos = centerPoint.y() - winSize[1]//2
+
+        self.setGeometry(QtCore.QRect(xPos, yPos, winSize[0], winSize[1]))
+        self.setFixedSize(winSize[0], winSize[1])
         self.UiComponents() # initializing ui      
         self.show() # showing all the widgets
   
@@ -82,8 +91,13 @@ class InputBox(QMainWindow):
     def show_plot(self, file_data, surr_data, numComp,*, fn=''):
         from screen.utils.utils import plotly_gen
         fig = plotly_gen(file_data, surr_data, numComp=numComp, file_name=fn)
-        self.w = PlotlyViewer(fig)
+        self.w = PlotlyViewer(fig=fig)
         self.w.show()
+
+        # so cursor remains active when switching window
+        self.show() 
+        self.raise_() 
+        self.activateWindow()
 
     
     def constuct_fn(self):
@@ -115,6 +129,12 @@ class InputBox(QMainWindow):
                 self.show_plot(file_data, surr_data, numComp, fn=_fn)
             except Exception as e:
                 logger.exception(str(e))
+    
+
+    def closeEvent(self, event):
+        try: self.w.close()
+        except: pass
+
 
 
 if __name__ == '__main__':  
