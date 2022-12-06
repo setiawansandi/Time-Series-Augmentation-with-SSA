@@ -8,7 +8,8 @@ from pltSSsur import pltSSsur
 def allSurr1D(*, data_dir, score_file, save_as, nSur, fold_no):
     ''' Generate surrogate data for all files in data set
 
-    Input:  data_dir - &emsp;&emsp;- data directory
+    Input:  
+            data_dir - data directory
           score_file - score file containing which class the data belong to
              save_as - save output as csv or pickle
                 nSur - proportion of surrogate data to be generated (to balance data distribution)
@@ -27,8 +28,10 @@ def allSurr1D(*, data_dir, score_file, save_as, nSur, fold_no):
     # no. of surrogates depend on score
     nSur = np.dot(nSur, fold_no)
 
-    # delete directory including its content
-    shutil.rmtree(r'wrkdir') 
+    try:
+        # delete directory including its content
+        shutil.rmtree(r'wrkdir') 
+    except: pass
     # set working directory
     work_dir_path = set_work_dir(r"wrkdir")
 
