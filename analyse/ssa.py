@@ -1,4 +1,5 @@
 import numpy as np
+from numpy.matlib import repmat
 from scipy.linalg import toeplitz
 from scipy.signal import lfilter
 from numpy.linalg import eig
@@ -224,3 +225,39 @@ def ac(x, k, method = "unbiased"):
 def bk():
     pass
 
+
+
+def wcor(x, L):
+    ''' 
+    Syntax:
+        [R] = wcor(x, L)
+    '''
+    N = x.shape[0]
+    K = N - L + 1
+    Ls = min(L, K)
+    Ks =  max(L, K)
+
+    # w = [1:(Ls-1) repmat(Ls, [1 Ks-Ls+1]) (Ls-1):-1:1]'
+    # Compute weights
+    val1 = [i for i in range(1,Ls)]
+    val2 = repmat(Ls, 1, Ks-Ls+1).flatten()
+    val3 = [i for i in range(Ls-1, 0, -1)]
+    w = np.hstack((val1, val2, val3)); w=w[:, np.newaxis] # convert to [4x1]
+
+    # Compute w-covariation
+    xx = np.multiply(np.sqrt(repmat(w, 1, x.shape[1])), x) # weight matrix of data
+    covmat = np.dot(xx.T, xx)        #  cov <- crossprod(sqrt(w) * x);
+    # covmat is [ sx1x1 sx1x2 sx1x3...  where x1 is col vector- time series x1
+    #             sx2x1 sx2x2 sx2x3...  and so on
+    # Convert to correlations
+
+    # Convert to correlations
+    Is = 1./np.sqrt(np.diag(covmat))
+    Is = Is[:, np.newaxis] # so shape of Is is [n x 1] not [n]
+    # diagonals contain the magnitude of each data vector (time series)
+    # R = Is * cov * Is';             %  R <- Is * cov * rep(Is, each = nrow(cov));
+    # Is*Is' is a col*col matrix containing cross products - except diagonals
+    R = np.dot(Is, Is.T) * covmat
+    R = abs(R);
+    
+    return R
