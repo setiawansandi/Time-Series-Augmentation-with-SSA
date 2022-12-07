@@ -16,17 +16,15 @@ def allSurr1D(*, data_dir, score_file, save_as, nSur, fold_no):
              fold_no - how much the data is going to augmented (x fold)
     
     Returns:
-        .csv files in wrkdir
-        or
-        .pkl file
+        None (data is stored in wrkdir)
     '''
 
     valid = {'csv', 'pkl'}
     if save_as not in valid:
         raise ValueError(f"Invalid value for argument 'save_as'! Valid value: {valid}")
     
-    # no. of surrogates depend on score
-    nSur = np.dot(nSur, fold_no)
+    # multiple each value to the number of fold
+    nSur = {key: value * fold_no for key, value in nSur.items()}
 
     try:
         # delete directory including its content
@@ -39,7 +37,7 @@ def allSurr1D(*, data_dir, score_file, save_as, nSur, fold_no):
     data_score = dict()
     with open(os.path.join(data_dir,score_file)) as score:
         for line in score.readlines():
-            data_score[line.split()[0]] = int(line.split()[1])
+            data_score[line.split()[0]] = line.split()[1]
 
     for filename in os.listdir(data_dir):
 
