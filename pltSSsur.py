@@ -128,5 +128,7 @@ if __name__ == '__main__':
     import sys
 
     App = QApplication(sys.argv) # create pyqt5 app
-    ib = InputBox(total_entry=3, fe='csv', separator='_') # Input box config
+    # Input box config, 
+    # total_entry == no. of input box, fe == file extension
+    ib = InputBox(total_entry=3, fe='csv', separator='_')
     sys.exit(App.exec()) # start the app
