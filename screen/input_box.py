@@ -89,7 +89,7 @@ class InputBox(QMainWindow):
 
     
     def show_plot(self, file_data, surr_data, numComp,*, fn=''):
-        from screen.utils.utils import plotly_gen
+        from utils.utils import plotly_gen
         fig = plotly_gen(file_data, surr_data, numComp=numComp, file_name=fn)
         self.w = PlotlyViewer(fig=fig)
         self.w.show()
