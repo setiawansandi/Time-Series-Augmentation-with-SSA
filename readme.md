@@ -6,8 +6,6 @@ This project was created to allow for the augmentation of time-series dataset. T
 
 Lee, Tracey & Chan, H. & Leo, K. & Chew, Effie & Zhao, Ling & Sanei, Saeid. (2022). Improving Rehabilitative Assessment with Statistical and Shape Preserving Surrogate Data and Singular Spectrum Analysis. 58-63. 10.23919/SPA53010.2022.9927805.
 
-<br/>
-
 # How to run Time-Series-Date-Augmentation
 
 ## Table of Contents
@@ -24,7 +22,7 @@ Lee, Tracey & Chan, H. & Leo, K. & Chew, Effie & Zhao, Ling & Sanei, Saeid. (202
    1. [Directory Structure](#1-directory-structure)
    2. [Data Directory](#2-data-directory)
       1. [Score File](#score-file)
-      2. [Data File Naming Convention](#data-file-naming-convention)
+      2. [Data File](#data-file-naming-convention)
       3. [wrkdir Directory](#wrkdir-directory)
 
 3. [**Run the project**](#run-the-project-top)
@@ -33,9 +31,7 @@ Lee, Tracey & Chan, H. & Leo, K. & Chew, Effie & Zhao, Ling & Sanei, Saeid. (202
 
 4. [**Troubleshooting**](#troubleshooting-top)
 
-<br/>
-
-# Getting Started <small>[[Top](#table-of-contents)]</small>
+# Getting Started [[Top](#table-of-contents)]
 
 ## 1. Install Python
 
@@ -47,8 +43,6 @@ Before running this project, you'll need to install Python.
 
 ---
 
-<br/>
-
 ## 2. Install Anaconda
 
 - [Here is a link to the Anaconda Installer.](https://www.anaconda.com/)
@@ -56,8 +50,6 @@ Before running this project, you'll need to install Python.
 - [Here is a helpful guide to installing Anaconda on various operating systems.](https://docs.anaconda.com/anaconda/install/index.html)
 
 ---
-
-<br/>
 
 ## 3. Create Anaconda Environment
 
@@ -74,8 +66,6 @@ Two options:
   [Here is a guide to create conda environment using GUI](https://docs.anaconda.com/navigator/tutorials/manage-environments/)
 
 ---
-
-<br/>
 
 ## 4. Install Dependencies
 
@@ -97,11 +87,7 @@ Two options:
   (tsgen)..\time-series-data-augmentation> pip3 install -r requirements.txt
   ```
 
-<br/>
-
-<br/>
-
-# Project Structure <small>[[Top](#table-of-contents)]</small>
+# Project Structure [[Top](#table-of-contents)]
 
 ## 1. Directory structure
 
@@ -112,24 +98,32 @@ time-series-data-augmentation
 |    |__ssa.py
 |    |__surrog.py
 |
-|__data
+|__data/
+|__notebooks
+|    |__run_allSurr1D.ipynb
+|    |__run_pltSSsur.ipynb
+|
+|__saved_surr/
+|__screen/
+|__utils/
+|__wrkdir/
 |__allSurr1D.py
 |__pltSSsur.py
 |__requirements.txt
-|__run_allSurr1D.ipynb
-|__run_pltSSsur.ipynb
 ```
 
 - **analyse**: contains local modules.
-- data: dataset directory.
+- **data**: dataset directory.
+- **notebooks** : contains jupyter notebook to run the script interactively.
+- **saved_surr**: contains saved surrogate data.
+- **screen**: contains GUI for 'input' and 'plot' window
+- **utils**: contains utility methods
+- **wrkdir**: working directory. (auto generated)
 - **allSurr1D.py**: script to generate surrogate data from all the files in data dir.
 - **pltSSsur.py**: script to generate one surrogate data from one sample data.
 - **requirements.txt**: contains dependencies needed to run the project
-- **run_allSSurr1D.ipynb, run_pltSSsur.ipynb** : jupyter notebook to run the script. Generate surrogate from either all sample or one sample, plot graph, save synthesized data, and plot the output.
 
 ---
-
-<br/>
 
 ## 2. Data Directory
 
@@ -137,21 +131,29 @@ time-series-data-augmentation
   
   Contains list of score for each sample data. (i.e what class does the sample belongs).
   
-  Sample content (format: \<Sample Name> \<Score\> ):
+  Sample content (format: <Sample Name> <Score> ):
   
   ```
   P01 0
   P02 3
   P03 1
-  .
-  P34 2
+  ...
+  ```
+  
+  or
+  
+  ```
+  P01 cannot_perform
+  P02 performs_normally
+  P03 partially_performed
+  ...
   ```
 
 ---
 
-<br/>
-
-- ### Data File Naming Convention
+- ### Data File
+  
+  #### Naming Convention
   
   Generally, each sample file should follow this naming convention:
   
@@ -159,31 +161,38 @@ time-series-data-augmentation
   <Sample Name><Seperator><Identifier>
   ```
   
-  - \<Sample Name\> - Name of the sample.
+  - <Sample Name> - Name of the sample.
   
-  - \<Seperator\> - Seperator _symbol_ to set apart between name and identifier.
+  - <Seperator> - Seperator *symbol* to set apart between name and identifier.
     
-    - Valid separator: [ _ \. \s - \) \( ]
+    - Valid separator: [ _ . \s - ) ( ]
   
-  - \<Identifier\> - ID of the sample if multiple data are collected for that sample (can be omited if there is only one data per sample).
-    
-    <br/>
+  - <Identifier> - ID of the sample if multiple data are collected for that sample (can be omited if there is only one data per sample).
   
-  Currently, only .csv and .bin files are accepted.
+  - Valid e.g: P02_TS_2.csv, Sample_1.txt, or s1.csv
+
+#### Content
+
+Current accepted files : [.csv, .txt]
+
+- .csv & .txt format
+  
+  Each column should be seperated by a comma ( , ), e.g., table with 3 columns:
+  
+  ```
+  314, 15, 9
+  265,35, 89
+  793, 238, 46
+  ...
+  ```
 
 ---
-
-<br/>
 
 - ### wrkdir Directory
   
   wrkdir is a working directory containing generated surrogate data, sorted to respective classes.
 
-<br/>
-
-<br/>
-
-# Run the Project <small>[[Top](#table-of-contents)]</small>
+# Run the Project [[Top](#table-of-contents)]
 
 - ### Setting up
   
@@ -193,26 +202,20 @@ time-series-data-augmentation
   | ------------------- | ---------------------------------------------------------------------------------- |
   | run_allSurr1D.ipynb | Generates surrogate data for all files in data set and saves the output to wrkdir. |
   | run_pltSSsur.ipynb  | Generates surrogate data for one sample and plot the output.                       |
-  
-  <br/>
-  
+
   Before running the cell, verify that:
-  
-  1. Data directory is not empty and contains sample file(s) with appropriate naming convention as mentioned above.
-  
-  2. 'Score' file is present in Data directory and contains list of "\<SAMPLE\> \<SCORE\>'' value pair.
-  
-  3. Code is running in the correct Python environment (tsgen).
-     
-     ```powershell
-     conda activate tsgen # to activate tsgen environment
-     ```
 
-<br/>
+1. Data directory is not empty and contains sample file(s) with appropriate naming convention as mentioned above.
 
-<br/>
+2. 'Score' file is present in Data directory and contains list of "<SAMPLE> <SCORE>'' value pair.
 
-# Troubleshooting <small>[[Top](#table-of-contents)]</small>
+3. Code is running in the correct Python environment (tsgen).
+   
+   ```powershell
+   conda activate tsgen # to activate tsgen environment
+   ```
+
+# Troubleshooting [[Top](#table-of-contents)]
 
 ## 1. 'conda' is not recognized as an internal or external command, operable program or batch file.
 
@@ -222,9 +225,9 @@ This happens if you didn't add Conda to PATH during installation. To remedy this
 
 Add these two paths:
 
-* `C:\Users\<user-name>\Anaconda3\Scripts`
+- `C:\Users\<user-name>\Anaconda3\Scripts`
 
-* `C:\Users\<user-name>\Anaconda3\`
+- `C:\Users\<user-name>\Anaconda3\`
 
 ## 2. Value error: Mime type rendering requires nbformat>=4.2.0 but it is not installed
 
