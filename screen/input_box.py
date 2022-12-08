@@ -9,11 +9,12 @@ from pltSSsur import pltSSsur
   
 class InputBox(QMainWindow):
   
-    def __init__(self, total_entry = 3, *, fe, separator):
+    def __init__(self, total_entry = 3, *, fe, separator, numComp):
         super().__init__()
         self._total_entry = total_entry
         self.fe = fe
         self.separator = separator
+        self.numComp = numComp
         self.w = None # plot window
 
         # keep main window on top when another window is open
@@ -88,9 +89,9 @@ class InputBox(QMainWindow):
         return lineEdit
 
     
-    def show_plot(self, file_data, surr_data, numComp,*, fn=''):
+    def show_plot(self, file_data, surr_data, *, fn=''):
         from utils.utils import plotly_gen
-        fig = plotly_gen(file_data, surr_data, numComp=numComp, file_name=fn)
+        fig = plotly_gen(file_data, surr_data, numComp=self.numComp, file_name=fn)
         self.w = PlotlyViewer(fig=fig)
         self.w.show()
 
@@ -123,10 +124,9 @@ class InputBox(QMainWindow):
             try:
                 _fn = self.constuct_fn() # construct file name
                 
-                numComp = 3
-                file_data, surr_data = pltSSsur(_fn, numComp=numComp, plot_ok=True, data_dir_path='data')
+                file_data, surr_data = pltSSsur(_fn, numComp=self.numComp, plot_ok=True, data_dir_path='data')
 
-                self.show_plot(file_data, surr_data, numComp, fn=_fn)
+                self.show_plot(file_data, surr_data, fn=_fn)
             except Exception as e:
                 logger.exception(str(e))
     
