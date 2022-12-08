@@ -6,9 +6,9 @@ from analyse.ssa import *
 from analyse.surrog import *
 
 
-def pltSSsur(file_name, *, data_dir_path, numComp = 3, plot_ok = False, R_ok=False):
+def pltSSsur(file_name, *, data_dir_path, numComp, plot_ok = False, R_ok=False):
     ''' perform SSA decomposition, and 
-        performing Fourier decomposition on descending eigenvalues (set R_ok to 'True')
+        performing Fourier decomposition on descending eigenvalues (set R_ok arg to 'True')
 
     Syntax:                [surr_data] = pltSSsur(file_name, data_dir_path, plot_ok=False)
             [original_data][surr_data] = pltSSsur(file_name, data_dir_path, plot_ok=True)
@@ -32,7 +32,7 @@ def pltSSsur(file_name, *, data_dir_path, numComp = 3, plot_ok = False, R_ok=Fal
     '''
     
     numR=16;        # how many reconstructed to view - 5
-    numComp=numComp;# how many components x/y/z
+    numComp=numComp;# how many components (columns) x/y/z
     numFreq=3;      # how many frequency domain values
     M = 17          # embedding dimension
     EVbp = []
@@ -76,7 +76,8 @@ def pltSSsur(file_name, *, data_dir_path, numComp = 3, plot_ok = False, R_ok=Fal
         E, V, A, R, C = ssa(plotdata, M)
 
         if R_ok: # generate reconstructed
-            '''w_cor=wcor(R,M)''' # get w correlations between reconstructed #TODO continue the code pltSSAff
+            '''w_cor=wcor(R,M)''' # get w correlations between reconstructed
+            #TODO continue the code pltSSAff
             if R_stacked is None:
                 R_stacked = np.vstack([ R[np.newaxis,:,:] ])
             else:
@@ -119,16 +120,28 @@ def pltSSsur(file_name, *, data_dir_path, numComp = 3, plot_ok = False, R_ok=Fal
 
     
 if __name__ == '__main__':
-    # no input dialog
-    # file_data, surr_data = pltSSsur(_fn='p02_ts_2.csv', numComp=3, plot_ok=True, data_dir_path='data')
+    
+    '<< set to True to enable input dialog >>'
+    use_input_dialog = False
 
-    # with input dialog
-    from screen.input_box import InputBox
-    from PyQt5.QtWidgets import QApplication
-    import sys
+    if use_input_dialog:
+        from screen.input_box import InputBox
+        from PyQt5.QtWidgets import QApplication
+        import sys
 
-    App = QApplication(sys.argv) # create pyqt5 app
-    # Input box config, 
-    # total_entry == no. of input box, fe == file extension
-    ib = InputBox(total_entry=3, fe='csv', separator='_')
-    sys.exit(App.exec()) # start the app
+        App = QApplication(sys.argv) # create pyqt5 app
+        '''
+        Input box config: 
+        - total_entry == no. of input box
+        - fe == file extension
+        - separator == char used to separate the name and sample no. (e.g '_' in 'Sample_1.csv')
+          [for list of valid separator, please refer to documentation (readmr.md)]
+        - numComp == number of data components (columns) in each file
+        '''
+        ib = InputBox(total_entry=3, fe='csv', separator='_', numComp=3)
+        sys.exit(App.exec()) # start the app
+    
+    else:
+        res = pltSSsur(file_name='p02_ts_2.csv', numComp=3, data_dir_path='data')
+        # print(res)
+
