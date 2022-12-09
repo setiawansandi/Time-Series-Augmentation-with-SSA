@@ -6,6 +6,10 @@ This project was created to allow for the augmentation of time-series dataset. T
 
 Lee, Tracey & Chan, H. & Leo, K. & Chew, Effie & Zhao, Ling & Sanei, Saeid. (2022). Improving Rehabilitative Assessment with Statistical and Shape Preserving Surrogate Data and Singular Spectrum Analysis. 58-63. 10.23919/SPA53010.2022.9927805.
 
+<br/>
+
+<br/>
+
 # How to run Time-Series-Date-Augmentation
 
 ## Table of Contents
@@ -31,6 +35,10 @@ Lee, Tracey & Chan, H. & Leo, K. & Chew, Effie & Zhao, Ling & Sanei, Saeid. (202
 
 4. [**Troubleshooting**](#troubleshooting-top)
 
+<br/>
+
+<br/>
+
 # Getting Started [[Top](#table-of-contents)]
 
 ## 1. Install Python
@@ -43,6 +51,8 @@ Before running this project, you'll need to install Python.
 
 ---
 
+<br/>
+
 ## 2. Install Anaconda
 
 - [Here is a link to the Anaconda Installer.](https://www.anaconda.com/)
@@ -50,6 +60,8 @@ Before running this project, you'll need to install Python.
 - [Here is a helpful guide to installing Anaconda on various operating systems.](https://docs.anaconda.com/anaconda/install/index.html)
 
 ---
+
+<br/>
 
 ## 3. Create Anaconda Environment
 
@@ -66,6 +78,8 @@ Two options:
   [Here is a guide to create conda environment using GUI](https://docs.anaconda.com/navigator/tutorials/manage-environments/)
 
 ---
+
+<br/>
 
 ## 4. Install Dependencies
 
@@ -86,6 +100,10 @@ Two options:
   ```
   (tsgen)..\time-series-data-augmentation> pip3 install -r requirements.txt
   ```
+
+ <br/>
+
+<br/>
 
 # Project Structure [[Top](#table-of-contents)]
 
@@ -125,6 +143,8 @@ time-series-data-augmentation
 
 ---
 
+<br/>
+
 ## 2. Data Directory
 
 - ### Score file
@@ -149,7 +169,7 @@ time-series-data-augmentation
   ...
   ```
 
----
+<br/>
 
 - ### Data File
   
@@ -171,6 +191,8 @@ time-series-data-augmentation
   
   - Valid e.g: P02_TS_2.csv, Sample_1.txt, or s1.csv
 
+<br/>
+
 #### Content
 
 Current accepted files : [.csv, .txt]
@@ -186,11 +208,15 @@ Current accepted files : [.csv, .txt]
   ...
   ```
 
----
+<br/>
 
 - ### wrkdir Directory
   
   wrkdir is a working directory containing generated surrogate data, sorted to respective classes.
+
+<br/>
+
+<br/>
 
 # Run the Project [[Top](#table-of-contents)]
 
@@ -215,6 +241,8 @@ Current accepted files : [.csv, .txt]
    conda activate tsgen # to activate tsgen environment
    ```
 
+<br/>
+
 # Troubleshooting [[Top](#table-of-contents)]
 
 ## 1. 'conda' is not recognized as an internal or external command, operable program or batch file.
@@ -229,6 +257,10 @@ Add these two paths:
 
 - `C:\Users\<user-name>\Anaconda3\`
 
+<br/>
+
 ## 2. Value error: Mime type rendering requires nbformat>=4.2.0 but it is not installed
 
 do: `pip install --upgrade nbformat`, then restart jupyter kernel.
+
+<br/>
