@@ -193,20 +193,20 @@ time-series-data-augmentation
 
 <br/>
 
-#### Content
+   #### Content
 
-Current accepted files : [.csv, .txt]
+   Current accepted files : [.csv, .txt]
 
-- .csv & .txt format
-  
-  Each column should be seperated by a comma ( , ), e.g., table with 3 columns:
-  
-  ```
-  314, 15, 9
-  265,35, 89
-  793, 238, 46
-  ...
-  ```
+   - .csv & .txt format
+
+     Each column should be seperated by a comma ( , ), e.g., table with 3 columns:
+
+     ```
+     314, 15, 9
+     265,35, 89
+     793, 238, 46
+     ...
+     ```
 
 <br/>
 
