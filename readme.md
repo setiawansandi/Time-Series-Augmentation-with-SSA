@@ -173,7 +173,7 @@ time-series-data-augmentation
 
 - ### Data File
   
-  -#### Naming Convention
+  -.#### Naming Convention
   
      Generally, each sample file should follow this naming convention:
 
@@ -193,7 +193,7 @@ time-series-data-augmentation
 
 <br/>
 
-   -#### Content
+   - #### Content
 
       Current accepted files : [.csv, .txt]
 
