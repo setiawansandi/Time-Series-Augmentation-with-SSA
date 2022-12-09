@@ -100,8 +100,8 @@ Two options:
   ```
   (tsgen)..\time-series-data-augmentation> pip3 install -r requirements.txt
   ```
-
- <br/>
+  
+  <br/>
 
 <br/>
 
@@ -112,14 +112,14 @@ Two options:
 ```
 time-series-data-augmentation
 |__analyse
-|    |__routines.py
-|    |__ssa.py
-|    |__surrog.py
+|    |__routines.py
+|    |__ssa.py
+|    |__surrog.py
 |
 |__data/
 |__notebooks
-|    |__run_allSurr1D.ipynb
-|    |__run_pltSSsur.ipynb
+|    |__run_allSurr1D.ipynb
+|    |__run_pltSSsur.ipynb
 |
 |__saved_surr/
 |__screen/
@@ -173,40 +173,40 @@ time-series-data-augmentation
 
 - ### Data File
   
-  #### Naming Convention
-  
-  Generally, each sample file should follow this naming convention:
-  
-  ```
-  <Sample Name><Seperator><Identifier>
-  ```
-  
-  - <Sample Name> - Name of the sample.
-  
-  - <Seperator> - Seperator *symbol* to set apart between name and identifier.
+  - #### Naming Convention
     
-    - Valid separator: [ _ . \s - ) ( ]
+    Generally, each sample file should follow this naming convention:
+    
+    ```
+    <Sample Name><Seperator><Identifier>
+    ```
+    
+    - <Sample Name> - Name of the sample.
+    
+    - <Seperator> - Seperator _symbol_ to set apart between name and identifier.
+      
+      - Valid separator: [ _ . \s - ) ( ]
+    
+    - <Identifier> - ID of the sample if multiple data are collected for that sample (can be omited if there is only one data per sample).
+    
+    - Valid e.g: P02_TS_2.csv, Sample_1.txt, or s1.csv
+      
+      <br/>
   
-  - <Identifier> - ID of the sample if multiple data are collected for that sample (can be omited if there is only one data per sample).
-  
-  - Valid e.g: P02_TS_2.csv, Sample_1.txt, or s1.csv
-
-<br/>
-
-#### Content
-
-Current accepted files : [.csv, .txt]
-
-- .csv & .txt format
-  
-  Each column should be seperated by a comma ( , ), e.g., table with 3 columns:
-  
-  ```
-  314, 15, 9
-  265,35, 89
-  793, 238, 46
-  ...
-  ```
+  - #### Content
+    
+    Current accepted files : [.csv, .txt]
+    
+    - .csv & .txt format
+      
+      Each column should be seperated by a comma ( , ), e.g., table with 3 columns:
+      
+      ```
+      314, 15, 9
+      265,35, 89
+      793, 238, 46
+      ...
+      ```
 
 <br/>
 
@@ -228,9 +228,8 @@ Current accepted files : [.csv, .txt]
   | ------------------- | ---------------------------------------------------------------------------------- |
   | run_allSurr1D.ipynb | Generates surrogate data for all files in data set and saves the output to wrkdir. |
   | run_pltSSsur.ipynb  | Generates surrogate data for one sample and plot the output.                       |
-
+  
   Before running the cell, verify that:
-
 1. Data directory is not empty and contains sample file(s) with appropriate naming convention as mentioned above.
 
 2. 'Score' file is present in Data directory and contains list of "<SAMPLE> <SCORE>'' value pair.
@@ -249,7 +248,7 @@ Current accepted files : [.csv, .txt]
 
 This happens if you didn't add Conda to PATH during installation. To remedy this:
 
-`windows` key → `edit environment variables for your account` → select `Path` variable (under user variables) → `Edit` → `New`
+`windows` key → `edit environment variables for your account` → select `Path` variable (under user variables) → `Edit` → `New`
 
 Add these two paths:
 
