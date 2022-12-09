@@ -173,40 +173,40 @@ time-series-data-augmentation
 
 - ### Data File
   
-  #### Naming Convention
+  -#### Naming Convention
   
-  Generally, each sample file should follow this naming convention:
-  
-  ```
-  <Sample Name><Seperator><Identifier>
-  ```
-  
-  - <Sample Name> - Name of the sample.
-  
-  - <Seperator> - Seperator *symbol* to set apart between name and identifier.
-    
-    - Valid separator: [ _ . \s - ) ( ]
-  
-  - <Identifier> - ID of the sample if multiple data are collected for that sample (can be omited if there is only one data per sample).
-  
-  - Valid e.g: P02_TS_2.csv, Sample_1.txt, or s1.csv
+     Generally, each sample file should follow this naming convention:
+
+     ```
+     <Sample Name><Seperator><Identifier>
+     ```
+
+     - <Sample Name> - Name of the sample.
+
+     - <Seperator> - Seperator *symbol* to set apart between name and identifier.
+
+       - Valid separator: [ _ . \s - ) ( ]
+
+     - <Identifier> - ID of the sample if multiple data are collected for that sample (can be omited if there is only one data per sample).
+
+     - Valid e.g: P02_TS_2.csv, Sample_1.txt, or s1.csv
 
 <br/>
 
-   #### Content
+   -#### Content
 
-   Current accepted files : [.csv, .txt]
+      Current accepted files : [.csv, .txt]
 
-   - .csv & .txt format
+      - .csv & .txt format
 
-     Each column should be seperated by a comma ( , ), e.g., table with 3 columns:
+        Each column should be seperated by a comma ( , ), e.g., table with 3 columns:
 
-     ```
-     314, 15, 9
-     265,35, 89
-     793, 238, 46
-     ...
-     ```
+        ```
+        314, 15, 9
+        265,35, 89
+        793, 238, 46
+        ...
+        ```
 
 <br/>
 
