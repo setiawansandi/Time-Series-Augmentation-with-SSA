@@ -54,7 +54,6 @@ def aaft(xV, nsur):
 
         # New Fourier transformed data with only the phase changed
         tmpV = np.hstack((magnV[0:n2+1].T, np.flipud(magnV[1:n2]).T)).T # so tmpV = magnV?
-        check = tmpV.copy()
         tmpV = np.multiply(tmpV, np.exp(nfiV * 1j))
 
         # Transform back to time domain
@@ -69,5 +68,5 @@ def aaft(xV, nsur):
         # zV is the AAFT surrogate of xV
         zV[:,count] = np.asarray(oxV)[np.asarray(iyftV)]
         if count == 0: zV = zV.flatten()
-        
+    
     return zV
