@@ -191,8 +191,6 @@ time-series-data-augmentation
 
      - Valid e.g: P02_TS_2.csv, Sample_1.txt, or s1.csv
 
-<br/>
-
    - #### Content
 
       Current accepted files : [.csv, .txt]
