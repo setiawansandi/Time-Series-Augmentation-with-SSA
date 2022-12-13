@@ -92,7 +92,7 @@ class Plot:
 
             
 
-    def reconstructed(self, file_data, R, *, num_comp, file_name, is_jupyter=False, signal_no=5):
+    def reconstructed(self, file_data, R, *, num_comp, title, is_jupyter=False, signal_no=5):
         ''' Plot reconstructed signals
     
         if the method is run on jupyter notebook (set is_jupyter to 'True'),\
@@ -170,7 +170,7 @@ class Plot:
         if is_jupyter:
                 # Update title and height
                 fig.update_layout(
-                    title_text=file_name + " SSA plot", 
+                    title_text=title + " SSA plot", 
                     height=100 + 250 * num_comp, 
                     width=900,
                     )
@@ -178,7 +178,7 @@ class Plot:
 
         else:
             fig.update_layout(
-                title_text=file_name + " SSA plot", 
+                title_text=title + " SSA plot", 
                 margin=dict(
                     l=50,
                     r=50,
