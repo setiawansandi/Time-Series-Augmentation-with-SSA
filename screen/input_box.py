@@ -6,15 +6,17 @@ import sys
 
 from screen.plotly_viewer import PlotlyViewer
 from pltSSsur import pltSSsur
+from utils.plot import Plot
   
 class InputBox(QMainWindow):
   
-    def __init__(self, total_entry = 3, *, fe, separator, numComp):
+    def __init__(self, total_entry = 3, *, fe, separator, num_comp):
         super().__init__()
         self._total_entry = total_entry
         self.fe = fe
         self.separator = separator
-        self.numComp = numComp
+        self.num_comp = num_comp
+        self.plot = Plot() # plot class to generate plotly graph
         self.w = None # plot window
 
         # keep main window on top when another window is open
@@ -90,8 +92,8 @@ class InputBox(QMainWindow):
 
     
     def show_plot(self, file_data, surr_data, *, fn=''):
-        from utils.utils import plotly_gen
-        fig = plotly_gen(file_data, surr_data, numComp=self.numComp, file_name=fn)
+        
+        fig = self.plot.ssa(file_data, surr_data, num_comp=self.num_comp, title=fn)
         self.w = PlotlyViewer(fig=fig)
         self.w.show()
 
@@ -124,7 +126,7 @@ class InputBox(QMainWindow):
             try:
                 _fn = self.constuct_fn() # construct file name
                 
-                file_data, surr_data = pltSSsur(_fn, numComp=self.numComp, plot_ok=True, data_dir_path='data')
+                file_data, surr_data = pltSSsur(_fn, numComp=self.num_comp, plot_ok=True, data_dir_path='data')
 
                 self.show_plot(file_data, surr_data, fn=_fn)
             except Exception as e:
