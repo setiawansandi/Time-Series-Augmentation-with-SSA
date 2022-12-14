@@ -1,8 +1,3 @@
-import os
-from numpy import mean, power, argmin, savetxt
-from math import log
-from pathlib import Path
-
 
 def set_data_file(file_name, data_dir_path):
     '''set data path
@@ -14,10 +9,12 @@ def set_data_file(file_name, data_dir_path):
         file_abs_path - absolute path to the data file
     '''
 
+    import os
+
     # os.path.join will concatenate the path.
     # os.path.abspath will interprate os.pardir as 
     # going up by one directory + return abs path.
-    file_abs_path = os.path.abspath(os.path.join(data_dir_path, os.pardir, "data", file_name))
+    file_abs_path = os.path.abspath(os.path.join(data_dir_path, file_name))
 
     return file_abs_path
 
@@ -35,6 +32,9 @@ def read_BIN(): #TODO
 
 
 def get_min(V):
+    from numpy import mean, power, argmin
+    from math import log
+
     # estimate RDE per Braun given sorted eigenvalues in V
     V0 = V - mean(V)
     N = len(V)
@@ -65,7 +65,9 @@ def set_work_dir(dir_name):
     work_dir_path - absolute path to working directory
     
     '''
-    #TODO CLEAR CONTENT
+
+    import os
+
     # get current file (routines.py) path
     current_dir = os.path.dirname(os.path.realpath(__file__))
     # get relative path to parent dir + join with work dir name
@@ -85,7 +87,7 @@ def set_work_dir(dir_name):
 
 
 
-def save_as_csv(res, filename):
+def save_as_csv(*, data:list, score:list, file_name:list, save_to):
     ''' Save result as CSV
 
     Syntax: set_work_dir(res, filename, index)
@@ -100,16 +102,31 @@ def save_as_csv(res, filename):
     -------
     None
     '''
-    file_split = os.path.split(filename)
-    try:
-        os.makedirs(file_split[0])
-        print(f'[INFO] Directory {file_split[0]} is created successfully!')
-    except OSError as error:
-        pass
+    import os
+    from numpy import savetxt
+    from tqdm import tqdm # progress bar
+
+    for i in tqdm(range(len(data))):
+        file_path = os.path.join(save_to, str(score[i]), file_name[i])
+
+        file_split = os.path.split(file_path)
+        try:
+            os.makedirs(file_split[0])
+            # print(f'[INFO] Directory {file_split[0]} is created successfully!')
+        except OSError as error:
+            pass
     
-    savetxt(filename, res, delimiter=',')
+        savetxt(file_path, data[i], delimiter=',') # csv is essentially fancy txt
 
 
 
-def save_as_pickle():
-    pass
+def save_as_pickle(*, data:list, score:list, file_name:list, save_to):
+    import pickle
+    import os
+
+    packed_data = {"sursdata": data, "sursclass": score, "sursfile": file_name}
+    pkl_file = os.path.join(save_to, "surs.pkl")
+
+    f = open(pkl_file, "wb") # w: write, b:binary
+    f.write(pickle.dumps(packed_data))
+    f.close()
