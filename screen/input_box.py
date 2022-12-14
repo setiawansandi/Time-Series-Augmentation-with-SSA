@@ -16,7 +16,6 @@ class InputBox(QMainWindow):
         self.fe = fe
         self.separator = separator
         self.num_comp = num_comp
-        self.plot = Plot() # plot class to generate plotly graph
         self.w = None # plot window
 
         # keep main window on top when another window is open
@@ -93,7 +92,7 @@ class InputBox(QMainWindow):
     
     def show_plot(self, file_data, surr_data, *, fn=''):
         
-        fig = self.plot.ssa(file_data, surr_data, num_comp=self.num_comp, title=fn)
+        fig = Plot.ssa(file_data, surr_data, num_comp=self.num_comp, title=fn)
         self.w = PlotlyViewer(fig=fig)
         self.w.show()
 

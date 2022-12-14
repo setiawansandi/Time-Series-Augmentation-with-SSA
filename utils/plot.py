@@ -6,7 +6,8 @@ class Plot:
     ''' Class to generate plotly graph
     '''
 
-    def ssa(self, file_data, surr_data, *, num_comp, title, is_jupyter=False):
+    @staticmethod
+    def ssa(file_data, surr_data, *, num_comp, title, is_jupyter=False):
         ''' Plot generated surrogate data
     
         if the method is run on jupyter notebook (set is_jupyter to 'True'),\
@@ -63,8 +64,7 @@ class Plot:
             # fig.update_xaxes(title_text="Time", row=i+1, col=1)
             # fig.update_xaxes(title_text="Time", row=i+1, col=2)
             # fig.update_yaxes(title_text=f"Amp axis {i+1}", row=i+1, col=1)
-            # fig.update_yaxes(title_text=f"Amp axis {i+1}", row=i+1, col=2)
-            
+            # fig.update_yaxes(title_text=f"Amp axis {i+1}", row=i+1, col=2)    
 
         if is_jupyter:
             # Update title and height
@@ -90,9 +90,9 @@ class Plot:
             return fig # send fig variable to be displayed on windowed mode
         
 
-            
-
-    def reconstructed(self, file_data, R, *, num_comp, title, is_jupyter=False, signal_no=5):
+        
+    @staticmethod
+    def reconstructed(file_data, R, *, num_comp, title, is_jupyter=False, signal_no=5):
         ''' Plot reconstructed signals
     
         if the method is run on jupyter notebook (set is_jupyter to 'True'),\
@@ -102,7 +102,6 @@ class Plot:
         signal_amount = no. of reconstructed signal to be plotted
         '''
         
-
         # colour of the graphs
         ori_colour = '#636efa'
         plot_colour = ['#3366cc', '#dc3912', '#ff9900', '#109618', '#990099', \
@@ -189,3 +188,39 @@ class Plot:
                 showlegend=False)
 
             return fig # send fig variable to be displayed on windowed mode
+
+
+
+    @staticmethod
+    def aaft(*graphs, titles=[]):
+
+        fig = make_subplots(
+            rows=len(graphs), cols=1,
+            subplot_titles=(titles),
+            vertical_spacing=0.10,
+            )
+
+        index = 0
+        for graph in graphs:
+            try:
+                name = titles[index]
+            except:
+                name = ''
+
+            fig.add_trace(
+                go.Scatter(
+                    x=[x for x in range(len(graph))], y=graph, name=name, 
+                    showlegend=False),
+                row=index+1, col=1)
+
+            index += 1
+
+        
+        # Update title and height
+        fig.update_layout(
+            title_text="AAFT variables plot", 
+            height=100 + 250 * len(graphs), 
+            width=500,
+            )
+        fig.show()
+
