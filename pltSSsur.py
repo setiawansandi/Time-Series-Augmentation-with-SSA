@@ -6,7 +6,7 @@ from analyse.ssa import *
 from analyse.surrog import *
 
 
-def pltSSsur(file_name, *, data_dir_path, numComp, plot_ok = False, R_ok=False):
+def pltSSsur(file_name, *, data_dir_path, num_comp, plot_ok = False, R_ok=False):
     ''' perform SSA decomposition, and 
         performing Fourier decomposition on descending eigenvalues (set R_ok arg to 'True')
 
@@ -32,7 +32,7 @@ def pltSSsur(file_name, *, data_dir_path, numComp, plot_ok = False, R_ok=False):
     '''
     
     numR=16;        # how many reconstructed to view - 5
-    numComp=numComp;# how many components (columns) x/y/z
+    num_comp=num_comp;# how many components (columns) x/y/z
     numFreq=3;      # how many frequency domain values
     M = 17          # embedding dimension
     EVbp = []
@@ -64,10 +64,10 @@ def pltSSsur(file_name, *, data_dir_path, numComp, plot_ok = False, R_ok=False):
     # ======================== Generating ============================
 
     # create array of all zeros with indicated dimension
-    surr_data = np.zeros((numComp,data_len)); 
+    surr_data = np.zeros((num_comp,data_len)); 
     
     # loop over the components of signal
-    for comp in range(numComp):
+    for comp in range(num_comp):
         # time and frequency plot for 3 components of acceleration
         plotdata = original_data[comp,:];   # get one component of data
 
@@ -138,10 +138,10 @@ if __name__ == '__main__':
           [for list of valid separator, please refer to documentation (readmr.md)]
         - numComp == number of data components (columns) in each file
         '''
-        ib = InputBox(total_entry=3, fe='csv', separator='_', numComp=3)
+        ib = InputBox(total_entry=3, fe='csv', separator='_', num_comp=3)
         sys.exit(App.exec()) # start the app
     
     else:
-        res = pltSSsur(file_name='p02_ts_2.csv', numComp=3, data_dir_path='data')
+        res = pltSSsur(file_name='p02_ts_2.csv', num_comp=3, data_dir_path='data')
         # print(res)
 
