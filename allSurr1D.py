@@ -4,8 +4,9 @@ import shutil
 from analyse.routines import *
 from pltSSsur import pltSSsur
 import logging
+from numpy import rint
 
-def allSurr1D(*, data_dir, score_file, save_as, nSur=None, fold_no, numComp):
+def allSurr1D(*, data_dir, score_file, save_as, nSur=None, fold_no, num_comp):
     ''' Generate surrogate data for all files in data set
 
     Input:  
@@ -20,33 +21,40 @@ def allSurr1D(*, data_dir, score_file, save_as, nSur=None, fold_no, numComp):
         None (data is stored in wrkdir)
     '''
 
+
     # ======================== Initialize ============================
+
     logger=logging.getLogger() # log
 
     valid = {'csv', 'pkl'}
-    if save_as not in valid:
+    if save_as.lower() not in valid:
         raise ValueError(f"Invalid value for argument 'save_as'! Valid value: {valid}")
+    else:
+        sursdata = [] # to store generated surrogate data (2D matrix)
+        sursclass = [] # to store which class (score) of the data belong to
+        sursfile = [] # to store file names (if save as csv and for sanity checking)
     
     try:
         # delete directory including its content
+        # IF wrkdir exist
         shutil.rmtree(r'wrkdir') 
     except: 
         pass
-    # set working directory
+    # create new working directory
     work_dir_path = set_work_dir(r"wrkdir")
 
-    # get the score from txt file
+    # get the scores from txt file
     data_score = dict()
     with open(os.path.join(data_dir,score_file)) as score:
         for line in score.readlines():
             data_score[line.split()[0]] = line.split()[1]
     
-    # manually set nSur
+    # <<< manually set nSur >>>
     if nSur != None:
         # multiple each value to the number of fold
         nSur = {key: value * fold_no for key, value in nSur.items()}
 
-    # auto nSur
+    # <<< automatically set nSur >>>
     else:
         # calculate ratio of sample from each class
         # classes with lower amount of sample will generate more surrogate data
@@ -63,7 +71,7 @@ def allSurr1D(*, data_dir, score_file, save_as, nSur=None, fold_no, numComp):
                 print(f'{e} file is not valid')
                 continue
 
-        # get the 
+        # get the max ratio value from the class
         max_value = max(nSur.values())
     
         # multiple each value to the number of fold
@@ -82,28 +90,41 @@ def allSurr1D(*, data_dir, score_file, save_as, nSur=None, fold_no, numComp):
             pscore = data_score[nName] # get score given
         except: continue
 
-        ds_indx = 0 # surr dataset count
+        ds_count = 0 # for surr dataset count
         for surrnum in range(nSur[pscore]):
             # generate surrogate
             try:
-                res = pltSSsur(filename, data_dir_path=data_dir, numComp=numComp)
+                res = pltSSsur(filename, data_dir_path=data_dir, num_comp=num_comp)
             except Exception as e: 
                 logger.exception(str(e))
                 break
+            
+            # print(f'[INFO] [{surrnum}] Now at {filename}') # DEBUG
 
-            # save syntensized data
-            # print(f'[INFO] [{surrnum}] Now at {filename}')
-            if save_as == 'csv':
-                # construct surrogate file name
-                surr_file = filename.split(".")[0]+"_S"+str(surrnum)+"."+filename.split(".")[1]
-                file_path = os.path.join(work_dir_path, str(pscore), surr_file)
-                save_as_csv(res.T, file_path)
-            elif save_as == 'pkl':
-                raise Exception("pkl is not implemented")
-                save_as_pickle() #TODO
-            ds_indx += 1
+            # construct surrogate file name
+            surr_file = filename.split(".")[0]+"_S"+str(surrnum)+"."+filename.split(".")[1]
 
-        print(f'[INFO] {ds_indx} surrogate data generated from {filename}')
+            # hold the data
+            sursdata.append(rint(res.T).astype(int))
+            sursclass.append(pscore)
+            sursfile.append(surr_file)
+
+            ds_count += 1 # count
+
+        print(f'[INFO] {ds_count} surrogate data generated from {filename}')
+    
+
+    # ========================== Saving ==============================
+    
+    if save_as.lower() == 'pkl':
+        print("\nSaving as 'pkl' file")
+        save_as_pickle(data=sursdata, score=sursclass, file_name=sursfile, save_to=work_dir_path)
+
+    elif save_as.lower() == 'csv':
+        print("\nSaving as 'csv' file")
+        save_as_csv(data=sursdata, score=sursclass, file_name=sursfile, save_to=work_dir_path)
+    
+    print("Save complete!\n")
 
 
 
@@ -131,7 +152,7 @@ if __name__ == '__main__':
 
     ####################################################################################
 
-    '<< uncomment the line below and set apt value if NOT running from terminal >>'
+    '<< uncomment the line below and set the apt value if NOT running from terminal >>'
     # sys.argv = ['allSurr1D.py', '-f', '30', '--sf', 'score.txt', '-n', '3']
 
     args = parser.parse_args()
@@ -142,7 +163,7 @@ if __name__ == '__main__':
     num_comp = args.num_comp
 
     # nSur(ratio) depends on the amount of sample in each class (smaller the sample, bigger the nSur value).
-    # to balance the data distribution
+    # > to balance the data distribution
     '<< set "nSur=None" to auto set >>'
     nSur = None
     '<< or set it manually... >>'
@@ -150,4 +171,4 @@ if __name__ == '__main__':
     # nSur = {'0': 12, '1': 6, '2': 1, '3': 1}
     # nSur = {'cannot_perform': 12, 'partially_performed': 6, 'performed_abnormally': 1, 'performs_normally': 1}
 
-    allSurr1D(data_dir=data_dir, score_file=score_file, save_as=save_as, nSur=nSur, fold_no=fold_no, numComp=num_comp)
+    allSurr1D(data_dir=data_dir, score_file=score_file, save_as=save_as, nSur=nSur, fold_no=fold_no, num_comp=num_comp)
