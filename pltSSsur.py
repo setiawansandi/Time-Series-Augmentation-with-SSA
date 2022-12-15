@@ -122,7 +122,7 @@ def pltSSsur(file_name, *, data_dir_path, num_comp, plot_ok = False, R_ok=False)
 if __name__ == '__main__':
     
     '<< set to True to enable input dialog >>'
-    use_input_dialog = False
+    use_input_dialog = True
 
     if use_input_dialog:
         from screen.input_box import InputBox

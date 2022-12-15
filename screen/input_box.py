@@ -140,5 +140,5 @@ class InputBox(QMainWindow):
 
 if __name__ == '__main__':  
     App = QApplication(sys.argv) # create pyqt5 app
-    window = InputBox(total_entry=3, fe='csv', separator='_') # create the instance of our Window
+    window = InputBox(total_entry=3, fe='csv', separator='_', num_comp=3) # create the instance of our Window
     sys.exit(App.exec()) # start the app
