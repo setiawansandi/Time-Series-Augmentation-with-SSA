@@ -90,13 +90,14 @@ def set_work_dir(dir_name):
 def save_as_csv(*, data:list, score:list, file_name:list, save_to):
     ''' Save result as CSV
 
-    Syntax: set_work_dir(res, filename, index)
+    Syntax: save_as_csv(data, score, file_name, save_to)
 
-    Create directory of classes (according to 'Score'),
-    result is saved in respective directory
+    Save all the data stored in data list as csv.
 
-    Input:      res - result to be stored as csv
-           filename - path to where file is stored (inc. file name)
+    Input:     data - list of generated surrogate data (2D Matrix)
+              score - list of the scores corresponding to data
+          file_name - list of the file names corresponding to data
+            save_to - path to where the csv files will be store
 
     Returns
     -------
@@ -121,12 +122,63 @@ def save_as_csv(*, data:list, score:list, file_name:list, save_to):
 
 
 def save_as_pickle(*, data:list, score:list, file_name:list, save_to):
+    ''' Save result as PKL
+
+    Syntax: save_as_pkl(data, score, file_name, save_to)
+
+    Save all the data stored in data list as pkl.
+
+    Input:     data - list of generated surrogate data (2D Matrix)
+              score - list of the scores corresponding to data
+          file_name - list of the file names corresponding to data
+            save_to - path to where the csv files will be store
+
+    Returns
+    -------
+    None
+    '''
     import pickle
     import os
 
     packed_data = {"sursdata": data, "sursclass": score, "sursfile": file_name}
     pkl_file = os.path.join(save_to, "surs.pkl")
 
-    f = open(pkl_file, "wb") # w: write, b:binary
-    f.write(pickle.dumps(packed_data))
-    f.close()
+    with open(pkl_file,'wb') as file_handle:
+        pickle.dump(packed_data, file_handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+
+def find_elements(records_array, val):
+    ''' Find indices of a given element in np.array
+
+    Syntax: find_elements(records_array, val)
+
+    returns a vector containing the linear indices of given element in records_array.
+
+    Input:    records_array - numpy array
+                        val - value to be compared
+
+    Returns
+    -------
+    all_elemements_index - vector containing all indices of given element in records_array
+    '''
+    # technically you can use np.where() directly but it's slow if the array is big
+
+    import numpy as np
+
+    # return index of sorted arr (sorted by unique element)
+    idx_sort = np.argsort(records_array)
+    # sorts records array so all unique elements are together 
+    sorted_records_array = records_array[idx_sort]
+    # returns the unique values, the index of the first occurrence of a value, and the count for each element
+    vals, idx_start, count = np.unique(sorted_records_array, return_counts=True, return_index=True)
+    # find the starting index of a given value
+    index = np.where(vals==val)[0][0]
+    # get the range of the 'grouped' elements
+    start = idx_start[index]
+    end = idx_start[index+1] if index+1 != len(idx_start) else -1
+
+    # get the original indices of the given element
+    all_elements_index = idx_sort[start:end]
+    
+    return all_elements_index
+    
