@@ -4,7 +4,7 @@ import shutil
 from analyse.routines import *
 from pltSSsur import pltSSsur
 import logging
-from numpy import rint
+import numpy as np
 
 def allSurr1D(*, data_dir, score_file, save_as, nSur=None, fold_no, num_comp):
     ''' Generate surrogate data for all files in data set
@@ -22,7 +22,7 @@ def allSurr1D(*, data_dir, score_file, save_as, nSur=None, fold_no, num_comp):
     '''
 
 
-    # ======================== Initialize ============================
+    # v======================== Initialize ============================v
 
     logger=logging.getLogger() # log
 
@@ -33,15 +33,6 @@ def allSurr1D(*, data_dir, score_file, save_as, nSur=None, fold_no, num_comp):
         sursdata = [] # to store generated surrogate data (2D matrix)
         sursclass = [] # to store which class (score) of the data belong to
         sursfile = [] # to store file names (if save as csv and for sanity checking)
-    
-    try:
-        # delete directory including its content
-        # IF wrkdir exist
-        shutil.rmtree(r'wrkdir') 
-    except: 
-        pass
-    # create new working directory
-    work_dir_path = set_work_dir(r"wrkdir")
 
     # get the scores from txt file
     data_score = dict()
@@ -79,7 +70,7 @@ def allSurr1D(*, data_dir, score_file, save_as, nSur=None, fold_no, num_comp):
             nSur[n_class] = round((max_value / value) * fold_no)
         
 
-    # ======================== Generating ============================
+    # v======================== Generating ============================v
 
     for filename in os.listdir(data_dir):
 
@@ -105,7 +96,7 @@ def allSurr1D(*, data_dir, score_file, save_as, nSur=None, fold_no, num_comp):
             surr_file = filename.split(".")[0]+"_S"+str(surrnum)+"."+filename.split(".")[1]
 
             # hold the data
-            sursdata.append(rint(res.T).astype(int))
+            sursdata.append(np.rint(res.T).astype(int))
             sursclass.append(pscore)
             sursfile.append(surr_file)
 
@@ -114,9 +105,27 @@ def allSurr1D(*, data_dir, score_file, save_as, nSur=None, fold_no, num_comp):
         print(f'[INFO] {ds_count} surrogate data generated from {filename}')
     
 
-    # ========================== Saving ==============================
+    # v======================= Set work dir ===========================v
+
+    try:
+        # delete directory including its content
+        # IF wrkdir exist
+        shutil.rmtree(r'wrkdir') 
+    except: 
+        pass
+    # create new working directory
+    work_dir_path = set_work_dir(r"wrkdir")
+
+
+    # v=========================== Saving =============================v
     
     if save_as.lower() == 'pkl':
+        # remove class '0' from the list
+        indices = find_elements(np.asarray(sursclass, dtype=object), '0')
+        sursdata = np.delete(sursdata, indices)
+        sursclass = np.delete(sursclass, indices)
+        sursfile = np.delete(sursfile, indices)
+
         print("\nSaving as 'pkl' file")
         save_as_pickle(data=sursdata, score=sursclass, file_name=sursfile, save_to=work_dir_path)
 
@@ -129,8 +138,8 @@ def allSurr1D(*, data_dir, score_file, save_as, nSur=None, fold_no, num_comp):
 
 
 if __name__ == '__main__':
+    # v======================== args parser ===========================v
 
-    ################################## args parser #####################################
     import argparse, sys
     
     parser = argparse.ArgumentParser(
@@ -139,7 +148,7 @@ if __name__ == '__main__':
 
     parser.add_argument('-d', '--datadir', dest='data_dir', default='data',
                         help='Path to data directory')
-    parser.add_argument('-s', '--saveas', dest='save_as', default='csv',
+    parser.add_argument('-o', '--output', dest='output', default='csv',
                         help='Ouput file (default: csv). Valid options: [csv, pkl]')
 
     requiredNamed = parser.add_argument_group('required named arguments')
@@ -150,25 +159,26 @@ if __name__ == '__main__':
     requiredNamed.add_argument('-n', '--numcomp', dest='num_comp', type=int, required=True,
                         help='Number of components (columns) in a data file')
 
-    ####################################################################################
+
+    # v========================= run project ==========================v
 
     '<< uncomment the line below and set the apt value if NOT running from terminal >>'
-    # sys.argv = ['allSurr1D.py', '-f', '30', '--sf', 'score.txt', '-n', '3']
+    sys.argv = ['allSurr1D.py', '-f', '30', '--sf', 'ARscore.txt', '-n', '3', '-o', 'pkl']
 
     args = parser.parse_args()
     data_dir = args.data_dir
     score_file = args.score_file
-    save_as = args.save_as
+    save_as = args.output
     fold_no = args.fold
     num_comp = args.num_comp
 
     # nSur(ratio) depends on the amount of sample in each class (smaller the sample, bigger the nSur value).
     # > to balance the data distribution
     '<< set "nSur=None" to auto set >>'
-    nSur = None
+    # nSur = None
     '<< or set it manually... >>'
     # e.g
-    # nSur = {'0': 12, '1': 6, '2': 1, '3': 1}
+    nSur = {'0': 12, '1': 6, '2': 1, '3': 1}
     # nSur = {'cannot_perform': 12, 'partially_performed': 6, 'performed_abnormally': 1, 'performs_normally': 1}
 
     allSurr1D(data_dir=data_dir, score_file=score_file, save_as=save_as, nSur=nSur, fold_no=fold_no, num_comp=num_comp)
