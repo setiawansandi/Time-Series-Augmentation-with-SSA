@@ -15,12 +15,14 @@ Lee, Tracey & Chan, H. & Leo, K. & Chew, Effie & Zhao, Ling & Sanei, Saeid. (202
 ## Table of Contents
 
 1. [**Getting Started**](#getting-started-top)
+   
    1. [Install Python](#1-install-python)
    2. [Install Anaconda](#2-install-anaconda)
    3. [Create Conda Environment](#3-create-anaconda-environment)
    4. [Install Dependencies](#4-install-dependencies)
 
 2. [**Project Structure**](#project-structure-top)
+   
    1. [Directory Structure](#1-directory-structure)
    2. [Data Directory](#2-data-directory)
       1. [Score File](#score-file)
@@ -28,6 +30,7 @@ Lee, Tracey & Chan, H. & Leo, K. & Chew, Effie & Zhao, Ling & Sanei, Saeid. (202
       3. [wrkdir Directory](#wrkdir-directory)
 
 3. [**Run the project**](#run-the-project-top)
+   
    1. [Setting up](#setting-up)
 
 4. [**Troubleshooting**](#troubleshooting-top)
@@ -67,13 +70,13 @@ You'll also need to install Anaconda.
 Two options:
 
 - Using Anaconda prompt or command prompt:
-
+  
   ```bash
   conda create --name tsgen python=3.9
   ```
 
 - Using graphical interface:
-
+  
   [Here is a guide to create conda environment using GUI](https://docs.anaconda.com/navigator/tutorials/manage-environments/)
 
 ---
@@ -83,23 +86,23 @@ Two options:
 ## 4. Install Dependencies
 
 - Navigate to project directory:
-
+  
   ```
   C:\path\to\project\dir\time-series-data-augmentation>
   ```
 
 - Switch to 'tsgen' environment:
-
+  
   ```
   ..\time-series-data-augmentation> conda activate tsgen
   ```
 
 - Pip install the dependencies from requirements.txt:
-
+  
   ```
   (tsgen)..\time-series-data-augmentation> pip3 install -r requirements.txt
   ```
-
+  
   <br/>
 
 <br/>
@@ -147,20 +150,20 @@ time-series-data-augmentation
 ## 2. Data Directory
 
 - ### Score file
-
+  
   Contains list of score for each sample data. (i.e what class does the sample belongs).
-
+  
   Sample content (format: <Sample Name> <Score> ):
-
+  
   ```
   P01 0
   P02 3
   P03 1
   ...
   ```
-
+  
   or
-
+  
   ```
   P01 cannot_perform
   P02 performs_normally
@@ -171,33 +174,33 @@ time-series-data-augmentation
 <br/>
 
 - ### Data File
-
+  
   - #### Naming Convention
-
+    
     Generally, each sample file should follow this naming convention:
-
+    
     ```
     <Sample Name><Seperator><Identifier>
     ```
-
+    
     - <Sample Name> - Name of the sample.
-
+    
     - <Seperator> - Seperator _symbol_ to set apart between name and identifier.
-
+      
       - Valid separator: [ _ . \s - ) ( ]
-
+    
     - <Identifier> - ID of the sample if multiple data are collected for that sample (can be omited if there is only one data per sample).
-
+    
     - Valid e.g: P02_TS_2.csv, Sample_1.txt, or s1.csv
-
+  
   - #### Content
-
+    
     Current accepted files : [.csv, .txt]
-
+    
     - .csv & .txt format
-
+      
       Each column should be seperated by a comma ( , ), e.g., table with 3 columns:
-
+      
       ```
       314, 15, 9
       265,35, 89
@@ -208,7 +211,7 @@ time-series-data-augmentation
 <br/>
 
 - ### wrkdir Directory
-
+  
   wrkdir is a working directory containing generated surrogate data, sorted to respective classes.
 
 <br/>
@@ -218,22 +221,23 @@ time-series-data-augmentation
 # Run the Project [[Top](#table-of-contents)]
 
 - ### Setting up
-
-  To run the project, go to either of these jupyter notebook files:
-
-  | Name                | Description                                                                        |
-  | ------------------- | ---------------------------------------------------------------------------------- |
-  | run_allSurr1D.ipynb | Generates surrogate data for all files in data set and saves the output to wrkdir. |
-  | run_pltSSsur.ipynb  | Generates surrogate data for one sample and plot the output.                       |
-
+  
+  There are many ways to run this project:
+  
+  | File                | Description                                                                                                                                                                                                                                                                                                        |
+  | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+  | run_allSurr1D.ipynb | Generates surrogate data for all files in data set and saves the output to wrkdir.                                                                                                                                                                                                                                 |
+  | allSurr1D.py        | Same as above. However, to run the script you need to parse the arguments. Example:<br/>```python -m allSurr1D -f 30 --sf ARscore.txt -n 3 -o pkl```<br/>The line above will create surrogate data with 30 folds with 3 classes, using scores from ARscore.txt and output as pkl file. (use -h flag for more info) |
+  | run_pltSSsur.ipynb  | Generates surrogate data for one sample and plot the output.                                                                                                                                                                                                                                                       |
+  | pltSSsur.py         | Similar to above but running this script allows you to swiftly enter the file names and plot the surrogate output. To run this script simply type in terminal:<br/>`python -m pltSSsur`                                                                                                                            |
+  
   Before running the cell, verify that:
-
 1. Data directory is not empty and contains sample file(s) with appropriate naming convention as mentioned above.
 
 2. 'Score' file is present in Data directory and contains list of "<SAMPLE> <SCORE>'' value pair.
 
 3. Code is running in the correct Python environment (tsgen).
-
+   
    ```powershell
    conda activate tsgen # to activate tsgen environment
    ```
@@ -246,9 +250,9 @@ time-series-data-augmentation
 
 This happens if you didn't add Conda to PATH during installation. To remedy this:
 
-`windows` key → `edit environment variables for your account` → select `Path` variable (under user variables) → `Edit` → `New`
+`Windows` key → `edit environment variables for your account` → select `Path` variable (under user variables) → `Edit` → `New`
 
-Add these two paths:
+Add these two paths and hit save:
 
 - `C:\Users\<user-name>\Anaconda3\Scripts`
 
