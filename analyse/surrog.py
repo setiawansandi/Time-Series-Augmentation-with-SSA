@@ -1,3 +1,4 @@
+#%%
 from operator import itemgetter
 import numpy as np
 from scipy.fftpack import fft, ifft
@@ -73,6 +74,22 @@ def aaft(xV, nsur, plot_ok=False):
 
         # zV is the AAFT surrogate of xV
         zV[:,count] = np.asarray(oxV)[np.asarray(iyftV)]
-        if count == 0: zV = zV.flatten() # flatten if there is only 1 column
+
+
+        if count==0 and nsur==1 : zV = zV.flatten() # flatten if there is only 1 column
     
     return zV
+
+if __name__ == '__main__':
+    import math
+    import numpy as np
+    import sys, os
+    sys.path.insert(0, os.path.abspath(os.path.join(sys.path[0], os.pardir)))
+    
+    # y=a*sin(k*(x+p))+q
+    xV = [math.sin(math.radians(5*i)) for i in range(73)]
+    xV = np.asarray(xV)
+    
+    aaft(xV=xV, nsur=3, plot_ok=True)
+
+# %%
