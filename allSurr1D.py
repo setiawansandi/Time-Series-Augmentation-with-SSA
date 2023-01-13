@@ -175,6 +175,8 @@ if __name__ == '__main__':
     # nSur(ratio) depends on the amount of sample in each class (smaller the sample, bigger the nSur value).
     # > to balance the data distribution
     '<< set "nSur=None" to auto set >>'
+    # The amount of data generated in each dataset depends on the 
+    # "no. of data in the category with highest amount of dataset * fold"
     # nSur = None
     '<< or set it manually... >>'
     # e.g
