@@ -16,6 +16,7 @@ def allSurr1D(*, data_dir, score_file, save_as, nSur=None, fold_no, num_comp, re
                 nSur - proportion of surrogate data to be generated (to balance data distribution)
              fold_no - how many times the data is going to augmented (x fold)
              numComp - number of components (columns) in a data file
+        remove_class - specify which class to be removed from the output
     
     Returns:
         None (data is stored in wrkdir)
@@ -111,8 +112,8 @@ def allSurr1D(*, data_dir, score_file, save_as, nSur=None, fold_no, num_comp, re
         # delete directory including its content
         # IF wrkdir exist
         shutil.rmtree(r'wrkdir') 
-    except: 
-        pass
+    except:
+        shutil.rmtree(r'../wrkdir')
     # create new working directory
     work_dir_path = set_work_dir(r"wrkdir")
 
@@ -155,6 +156,8 @@ if __name__ == '__main__':
                         help='Path to data directory')
     parser.add_argument('-o', '--output', dest='output', default='csv',
                         help='Ouput file (default: csv). Valid options: [csv, pkl]')
+    parser.add_argument('-rm', '--remove', dest='remove_ls', default=[], action='append',
+                        help='Remove specified class from the output')
 
     requiredNamed = parser.add_argument_group('required named arguments')
     requiredNamed.add_argument('--sf', '--scorefile', dest='score_file', required=True,
@@ -167,8 +170,8 @@ if __name__ == '__main__':
 
     # v========================= run project ==========================v
 
-    '<< uncomment the line below and set the apt value if NOT running from terminal >>'
-    sys.argv = ['allSurr1D.py', '-f', '5', '--sf', 'ARscore.txt', '-n', '3', '-o', 'csv']
+    '<< uncomment the line below and set the apt value if NOT running from terminal (i.e debug mode) >>'
+    # sys.argv = ['allSurr1D.py', '-f', '5', '--sf', 'ARscore.txt', '-n', '3', '-o', 'csv']
 
     args = parser.parse_args()
     data_dir = args.data_dir
@@ -176,6 +179,7 @@ if __name__ == '__main__':
     save_as = args.output
     fold_no = args.fold
     num_comp = args.num_comp
+    remove_ls = args.remove_ls
 
     # nSur(ratio) depends on the amount of sample in each class (smaller the sample, bigger the nSur value).
     # > to balance the data distribution
@@ -190,4 +194,20 @@ if __name__ == '__main__':
 
     allSurr1D(data_dir=data_dir, score_file=score_file, save_as=save_as, 
                 nSur=nSur, fold_no=fold_no, num_comp=num_comp, 
-                remove_class=["0"])
+                remove_class=remove_ls)
+
+
+    '''
+    e.g of running on terminal:
+    >> python -m allSurr1D -d "data/ARAT" -o pkl --sf 'score.txt' -f 30 -n 3 -rm 0 -rm 2
+
+    # what it does:
+    #   - Get data from direcotry "data/ARAT"
+    #   - Output as pkl
+    #   - Using score file "score.txt"
+    #   - Fold the data 30x
+    #   - No of columns in each file: 3
+    #   - Remove class(score) 0 and 2 from output 
+    #     (so e.g if there are 4 classes,[0, 1, 2, 3], only class [1] and [3] will be generated)
+
+    '''

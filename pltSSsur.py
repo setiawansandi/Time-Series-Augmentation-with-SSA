@@ -53,7 +53,11 @@ def pltSSsur(file_name, *, data_dir_path, num_comp, plot_ok = False, R_ok=False)
         # read and store the data in a numpy array
         original_data = np.genfromtxt(data_file_path, delimiter=',')
         original_data = original_data.transpose() # a * b -> b * a
-        data_len = original_data.shape[1] # get length of data
+        try:
+            data_len = original_data.shape[1] # get length of data
+        except:
+            data_len = original_data.shape[0] # if there's only 1 column
+
 
     elif fe == '.bin':
         raise Exception("method to read .bin is not implemented")
@@ -69,7 +73,10 @@ def pltSSsur(file_name, *, data_dir_path, num_comp, plot_ok = False, R_ok=False)
     # loop over the components of signal
     for comp in range(num_comp):
         # time and frequency plot for 3 components of acceleration
-        plotdata = original_data[comp,:];   # get one component of data
+        if num_comp != 1:
+            plotdata = original_data[comp,:]   # get one component of data
+        else:
+            plotdata = original_data[:]
 
         # Eigenfunctions, Variances,   principAl components, Reconstructed, Covariance
         # Eigenvectors,   EigenValues, principAl components, Reconstructed, Covariance
@@ -98,7 +105,10 @@ def pltSSsur(file_name, *, data_dir_path, num_comp, plot_ok = False, R_ok=False)
                 wavnoise = wavnoise+R[:,r]
 
             # Breitenberger's code removes mean so put back as a filtered signal
-            wavsigf = wavsig + np.mean(original_data[comp,:]);
+            if num_comp != 1:
+                wavsigf = wavsig + np.mean(original_data[comp,:])
+            else:
+                wavsigf = wavsig + np.mean(original_data[:])
             
             # surrogate the noise
             wavnoisur = aaft(wavnoise,1); # generate ONE AAFT surrogate     # uncomment for ssa & surr

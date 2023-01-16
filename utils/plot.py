@@ -26,7 +26,11 @@ class Plot:
             vertical_spacing=0.10,
             )
 
-        x_coor = [x for x in range(file_data.shape[1])]
+        try:
+            x_coor = [x for x in range(file_data.shape[1])]
+        except:
+            x_coor = [x for x in range(file_data.shape[0])]
+
 
         show_legend = True
         ori_str = "Original"
@@ -37,17 +41,22 @@ class Plot:
                 ori_str = "Original " + str(i+1)
                 surr_str = "Surrogate " + str(i+1)
 
+            if num_comp != 1:
+                surr_val = file_data[i,:]
+            else:
+                surr_val = file_data[:]
+
             # original
             fig.add_trace(
                 go.Scatter(
-                    x=x_coor, y=file_data[i,:], name=ori_str, 
+                    x=x_coor, y=surr_val, name=ori_str, 
                     line=dict(color=ori_colour), showlegend=show_legend),
                 row=i+1, col=1)
             
             # original + surrogate
             fig.add_trace(
                 go.Scatter(
-                    x=x_coor, y=file_data[i,:], name=ori_str,
+                    x=x_coor, y=surr_val, name=ori_str,
                     line=dict(color=ori2_colour), showlegend=False),
                 row=i+1, col=2)
 
