@@ -6,12 +6,12 @@ from pltSSsur import pltSSsur
 import logging
 import numpy as np
 
-def allSurr1D(*, data_dir, score_file, save_as, nSur=None, fold_no, num_comp):
+def allSurr1D(*, data_dir, score_file, save_as, nSur=None, fold_no, num_comp, remove_class=[]):
     ''' Generate surrogate data for all files in data set
 
     Input:  
             data_dir - data directory
-          score_file - score file containing which class the data belong to
+          score_file - name of score file containing which class the data belong to
              save_as - output file format (csv/pkl)
                 nSur - proportion of surrogate data to be generated (to balance data distribution)
              fold_no - how many times the data is going to augmented (x fold)
@@ -117,15 +117,20 @@ def allSurr1D(*, data_dir, score_file, save_as, nSur=None, fold_no, num_comp):
     work_dir_path = set_work_dir(r"wrkdir")
 
 
+    # v=================== Removng Unwanted Class ====================v
+    
+    if remove_class: # delete class data in 'remove_class' list
+        for n_class in remove_class:
+            indices = find_elements(np.asarray(sursclass, dtype=object), n_class)
+            sursdata = np.delete(sursdata, indices)
+            sursclass = np.delete(sursclass, indices)
+            sursfile = np.delete(sursfile, indices)
+    # TODO: *could be optimized by not generating these surrogate data in the first place
+
+
     # v=========================== Saving =============================v
     
     if save_as.lower() == 'pkl':
-        # remove class '0' from the list
-        indices = find_elements(np.asarray(sursclass, dtype=object), '0')
-        sursdata = np.delete(sursdata, indices)
-        sursclass = np.delete(sursclass, indices)
-        sursfile = np.delete(sursfile, indices)
-
         print("\nSaving as 'pkl' file")
         save_as_pickle(data=sursdata, score=sursclass, file_name=sursfile, save_to=work_dir_path)
 
@@ -146,7 +151,7 @@ if __name__ == '__main__':
         prog = 'Time-series data augmentation',
         description='Generate surrogate time-series data from sample dataset')
 
-    parser.add_argument('-d', '--datadir', dest='data_dir', default='data',
+    parser.add_argument('-d', '--datadir', dest='data_dir', default='data/ARAT',
                         help='Path to data directory')
     parser.add_argument('-o', '--output', dest='output', default='csv',
                         help='Ouput file (default: csv). Valid options: [csv, pkl]')
@@ -163,7 +168,7 @@ if __name__ == '__main__':
     # v========================= run project ==========================v
 
     '<< uncomment the line below and set the apt value if NOT running from terminal >>'
-    sys.argv = ['allSurr1D.py', '-f', '30', '--sf', 'ARscore.txt', '-n', '3', '-o', 'pkl']
+    sys.argv = ['allSurr1D.py', '-f', '5', '--sf', 'ARscore.txt', '-n', '3', '-o', 'csv']
 
     args = parser.parse_args()
     data_dir = args.data_dir
@@ -177,10 +182,12 @@ if __name__ == '__main__':
     '<< set "nSur=None" to auto set >>'
     # The amount of data generated in each dataset depends on the 
     # "no. of data in the category with highest amount of dataset * fold"
-    # nSur = None
+    nSur = None
     '<< or set it manually... >>'
     # e.g
-    nSur = {'0': 12, '1': 6, '2': 1, '3': 1}
+    # nSur = {'0': 12, '1': 6, '2': 1, '3': 1}
     # nSur = {'cannot_perform': 12, 'partially_performed': 6, 'performed_abnormally': 1, 'performs_normally': 1}
 
-    allSurr1D(data_dir=data_dir, score_file=score_file, save_as=save_as, nSur=nSur, fold_no=fold_no, num_comp=num_comp)
+    allSurr1D(data_dir=data_dir, score_file=score_file, save_as=save_as, 
+                nSur=nSur, fold_no=fold_no, num_comp=num_comp, 
+                remove_class=["0"])
