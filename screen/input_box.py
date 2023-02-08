@@ -125,7 +125,7 @@ class InputBox(QMainWindow):
             try:
                 _fn = self.constuct_fn() # construct file name
                 
-                file_data, surr_data = pltSSsur(_fn, num_comp=self.num_comp, plot_ok=True, data_dir_path='data')
+                file_data, surr_data = pltSSsur(_fn, num_comp=self.num_comp, plot_ok=True, data_dir_path='data/ARAT')
 
                 self.show_plot(file_data, surr_data, fn=_fn)
             except Exception as e:
