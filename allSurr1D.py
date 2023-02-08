@@ -97,7 +97,8 @@ def allSurr1D(*, data_dir, score_file, save_as, nSur=None, fold_no, num_comp, re
             surr_file = filename.split(".")[0]+"_S"+str(surrnum)+"."+filename.split(".")[1]
 
             # hold the data
-            sursdata.append(np.rint(res.T).astype(int))
+            # sursdata.append(np.rint(res.T).astype(int))
+            sursdata.append((res.T).astype(float))
             sursclass.append(pscore)
             sursfile.append(surr_file)
 
@@ -113,7 +114,8 @@ def allSurr1D(*, data_dir, score_file, save_as, nSur=None, fold_no, num_comp, re
         # IF wrkdir exist
         shutil.rmtree(r'wrkdir') 
     except:
-        shutil.rmtree(r'../wrkdir')
+        try: shutil.rmtree(r'../wrkdir')
+        except: pass
     # create new working directory
     work_dir_path = set_work_dir(r"wrkdir")
 
