@@ -131,7 +131,7 @@ def pltSSsur(file_name, *, data_dir_path, num_comp, plot_ok = False, R_ok=False)
     
 if __name__ == '__main__':
     
-    '<< set to True to enable input dialog >>'
+    '<< set to True to enable input dialog, False to manually set in the script >>'
     use_input_dialog = True
 
     if use_input_dialog:
@@ -152,6 +152,6 @@ if __name__ == '__main__':
         sys.exit(App.exec()) # start the app
     
     else:
-        res = pltSSsur(file_name='p02_ts_2.csv', num_comp=3, data_dir_path='data')
+        res = pltSSsur(file_name='p02_ts_2.csv', num_comp=3, data_dir_path='data/ARAT')
         # print(res)
 
