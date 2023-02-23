@@ -10,12 +10,13 @@ from utils.plot import Plot
   
 class InputBox(QMainWindow):
   
-    def __init__(self, total_entry = 3, *, fe, separator, num_comp):
+    def __init__(self, total_entry = 3, *, fe, separator, num_comp, data_dir_path=None):
         super().__init__()
         self._total_entry = total_entry
         self.fe = fe
         self.separator = separator
         self.num_comp = num_comp
+        self.data_dir_path = data_dir_path
         self.w = None # plot window
 
         # keep main window on top when another window is open
@@ -67,6 +68,7 @@ class InputBox(QMainWindow):
         self.inputContainerLayout.setObjectName("inputContainerLayout")
 
         self.entry_list = []
+        # create input box
         for i in range(self._total_entry):
             self.entry_list.append(self.create_entry(self.inputContainerWidget))
             self.inputContainerLayout.addWidget(self.entry_list[i])
@@ -125,7 +127,7 @@ class InputBox(QMainWindow):
             try:
                 _fn = self.constuct_fn() # construct file name
                 
-                file_data, surr_data = pltSSsur(_fn, num_comp=self.num_comp, plot_ok=True, data_dir_path='data/ARAT')
+                file_data, surr_data = pltSSsur(_fn, num_comp=self.num_comp, plot_ok=True, data_dir_path=self.data_dir_path)
 
                 self.show_plot(file_data, surr_data, fn=_fn)
             except Exception as e:

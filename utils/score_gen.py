@@ -19,4 +19,4 @@ def gen(data_dir='', output_name='score.txt', default='0'):
                 f.write(f'{fn} {default}\n')
 
 if __name__ == '__main__':
-    gen(data_dir='data/CO2')
+    gen(data_dir='data/Temperature')

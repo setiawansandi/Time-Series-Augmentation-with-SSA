@@ -148,7 +148,7 @@ if __name__ == '__main__':
           [for list of valid separator, please refer to documentation (readmr.md)]
         - numComp == number of data components (columns) in each file
         '''
-        ib = InputBox(total_entry=3, fe='csv', separator='_', num_comp=3)
+        ib = InputBox(total_entry=3, fe='csv', separator='_', num_comp=3, data_dir_path='data/ARAT')
         sys.exit(App.exec()) # start the app
     
     else:
