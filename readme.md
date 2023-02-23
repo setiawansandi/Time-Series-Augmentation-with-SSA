@@ -183,15 +183,15 @@ time-series-data-augmentation
     <Sample Name><Seperator><Identifier>
     ```
     
-    - <Sample Name> - Name of the sample.
+    - <Sample Name> - Name of the sample (determine which score the file belongs to).
     
     - <Seperator> - Seperator _symbol_ to set apart between name and identifier.
       
       - Valid separator: [ _ . \s - ) ( ]
     
-    - <Identifier> - ID of the sample if multiple data are collected for that sample (can be omited if there is only one data per sample).
+    - <Identifier> - ID of the sample if multiple data are collected for that sample (can be omited if there is only one set of data per sample).
     
-    - Valid e.g: P02_TS_2.csv, Sample_1.txt, or s1.csv
+    - Valid e.g.: P02_TS_2.csv, good(1).txt, bad(5).csv, data1-0 or s1.csv
   
   - #### Content
     
@@ -229,7 +229,7 @@ time-series-data-augmentation
   | run_allSurr1D.ipynb | Generates surrogate data for all files in data set and saves the output to wrkdir. (Also contains method to clear and save the surrogate data in wrkdir)                                                                                                                                                                   |
   | allSurr1D.py        | Same as above. However, you would need to include appropriate arguments to run the script. Example:<br/>`python -m allSurr1D -f 30 -n 3 --sf ARscore.txt -o pkl`<br/>The line above will create surrogate data with 30 folds, 3 classes, using scores from ARscore.txt and output as pkl file. (use -h flag for more info) |
   | run_pltSSsur.ipynb  | Generates surrogate data for one sample and plot the output.                                                                                                                                                                                                                                                               |
-  | pltSSsur.py         | Similar to the one above, but running this script would pop up an "Input Box" window that would allow you to swiftly enter the file names and plot the corresponding surrogate output. To run this script simply type the following line on the terminal:<br/>`python -m pltSSsur`<br/>                                    |
+  | pltSSsur.py         | Similar to the one above, but running this script would pop up an "Input Box" window that would allow you to swiftly enter the file names and plot the corresponding surrogate output. To run this script simply type the following line on the terminal:<br/>`python -m pltSSsur`<br/><br/> :warning: You need to set the correct path to the data folder (in the InputBox() constructor) before using the input box.                                    |
   
   Before running the cell, verify that:
 1. Data directory is not empty and contains sample file(s) with appropriate naming convention as mentioned above.
