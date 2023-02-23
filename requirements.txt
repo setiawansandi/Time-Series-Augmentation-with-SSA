@@ -1,10 +1,11 @@
 h5py==2.10.0
-keras==2.8.0
+keras==2.10.0
 matplotlib==3.4.3
 numpy==1.20.1
 plotly==5.11.0
 PyQt5==5.15.7
+PyQtWebEngine==5.15.6
 scipy==1.7.1
-tensorflow==2.11.0
-tensorflow_cpu==2.8.0
+tensorflow==2.10.1
+tensorflow_cpu==2.10.1
 tqdm==4.62.3
