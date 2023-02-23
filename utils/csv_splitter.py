@@ -1,7 +1,7 @@
 import os
 
 def split(filehandler, delimiter=',', row_limit=106, 
-    output_name_template='co2_%s.csv', output_path='data', keep_headers=False):
+    output_name_template='temperature_%s.csv', output_path='data/Temperature', keep_headers=False):
     """
     Splits a CSV file into multiple pieces.
     
@@ -42,4 +42,4 @@ def split(filehandler, delimiter=',', row_limit=106,
         current_out_writer.writerow(row)
 
 if __name__ == '__main__':
-    split(open('unused/dataset_co2.csv', 'r'))
+    split(open('old/dataset_co2.csv', 'r'))
