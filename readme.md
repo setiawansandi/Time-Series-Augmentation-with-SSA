@@ -1,6 +1,6 @@
 # Introduction
 
-This project was created to allow for the augmentation of time-series dataset. Time series data are widely used in machine learning. They are commonly used in model training for prediction and classification, to name a few. However, there have been instance where there were relatively lack of time series data to train the model, which resulted in either underfitting or low generalisation.
+This project was developed to enable the augmentation of time-series datasets. Time series data are widely used in machine learning. They are commonly used in model training for prediction and classification, to name a few. However, there have been instance where there were relatively lack of time series data to train the model, which resulted in either underfitting or low generalisation.
 
 "To remedy this, we use Singular Spectrum Analysis (SSA) to seperate a signal into trends and cycles -to describe the shape of the signal- and low level components. In a novel way we subject the low level component to randomizing processes then recombine this with the original trend and cycle components to form a synthetic time series."
 
